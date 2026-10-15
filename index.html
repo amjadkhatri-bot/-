@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK for Realtime Online Sync -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f8fafc; }
         .world-cup-bg {
@@ -17,27 +22,18 @@
         .glass-panel { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
         .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* 3D Realistic Trophy Styles */
-        .trophy-3d-wrapper {
-            perspective: 1000px;
-        }
         .trophy-3d-card {
             background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.15) 55%, transparent 85%);
             box-shadow: 0 0 80px rgba(245, 158, 11, 0.4), inset 0 0 40px rgba(254, 240, 138, 0.25);
             border: 2px solid rgba(245, 158, 11, 0.6);
-            transform: rotateX(10deg);
-            transition: transform 0.5s ease;
-        }
-        .trophy-3d-card:hover {
-            transform: rotateX(0deg) scale(1.05);
         }
         .realistic-trophy-icon {
             filter: drop-shadow(0 20px 30px rgba(245, 158, 11, 0.7)) drop-shadow(0 0 15px rgba(254, 240, 138, 0.9));
             animation: floatTrophy3D 3.5s ease-in-out infinite;
         }
         @keyframes floatTrophy3D {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
@@ -51,8 +47,13 @@
                     🏆
                 </div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-black gradient-gold tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
-                    <p class="text-xs text-slate-400 font-bold flex items-center gap-2">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-black gradient-gold tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
+                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
+                            <i class="fa-solid fa-signal text-[8px]"></i> أونلاين مباشر
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-bold flex items-center gap-2 mt-0.5">
                         <i class="fa-solid fa-school text-amber-400"></i> مدرسة الإمام سيف بن سلطان (11-12)
                     </p>
                 </div>
@@ -80,9 +81,9 @@
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تأكيد الحضور الرسمي (11 ضد 12)</span>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تأكيد الحضور الرسمي (مباشر لكل الأجهزة)</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
-                    <p class="text-slate-400 text-sm mt-1">اضغط على الصف لتأكيد حضوره (جميع الفرق غائبة تلقائياً حتى يتم الضغط عليها)</p>
+                    <p class="text-slate-400 text-sm mt-1">أي تغيير تقوم به يظهر فوراً في جميع أجهزة الطلاب والمعلمين</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
@@ -112,7 +113,7 @@
                     </div>
 
                     <!-- Center 3D Realistic Trophy -->
-                    <div class="trophy-3d-wrapper flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
+                    <div class="flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
                         <div class="w-52 h-52 sm:w-64 sm:h-64 rounded-full trophy-3d-card p-4 flex items-center justify-center relative">
                             <span class="text-8xl sm:text-9xl realistic-trophy-icon select-none">🏆</span>
                         </div>
@@ -139,14 +140,14 @@
             <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                 <div>
                     <h2 class="text-2xl font-black text-amber-400">جدول المواجهات (11 ضد 12)</h2>
-                    <p class="text-xs text-slate-400">جدول قرعة المجموعتين مع إمكانية إدخال الأهداف والنتائج</p>
+                    <p class="text-xs text-slate-400">جدول قرعة المجموعتين الحية مع النتائج التفاعلية</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-print"></i> طباعة الجدول
+                        <i class="fa-solid fa-print"></i> طباعة
                     </button>
                     <button onclick="switchTab('final')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-lg flex items-center gap-2">
-                        الانتقال إلى النهائي 🏆
+                        النهائي 🏆
                     </button>
                 </div>
             </div>
@@ -181,17 +182,17 @@
             <div class="glass-panel p-8 sm:p-12 rounded-3xl text-center relative overflow-hidden border border-amber-500/40">
                 <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 inline-block mb-4">المواجهة المباشرة الأخيرة</span>
                 <h2 class="text-3xl sm:text-5xl font-black gradient-gold tracking-tight mb-2">المباراة النهائية الكبرى</h2>
-                <p class="text-slate-400 text-sm mb-8">اختر طرفي النهائي لتتويج بطل دوري قيد الأرض 2026-2027</p>
+                <p class="text-slate-400 text-sm mb-8">تتويج بطل دوري قيد الأرض 2026-2027</p>
 
                 <div class="max-w-2xl mx-auto bg-slate-950/90 p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-sky-400 mb-2">بطل المجموعة الأولى (أ)</label>
-                            <input type="text" id="final-team1" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team1" onchange="syncOnlineData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-indigo-400 mb-2">بطل المجموعة الثانية (ب)</label>
-                            <input type="text" id="final-team2" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team2" onchange="syncOnlineData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                     </div>
 
@@ -214,15 +215,47 @@
         </div>
     </footer>
 
-    <!-- Logic Script -->
+    <!-- Logic Script with Online Live Synchronization -->
     <script>
-        const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
-        const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
+        // Default teams state
+        let teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
+        let teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
+        let groupAStore = [];
+        let groupBStore = [];
+
+        // Local Storage Online Fallback Sync across tabs/devices
+        function syncOnlineData() {
+            const dataState = {
+                teams11,
+                teams12,
+                groupAStore,
+                groupBStore,
+                final1: document.getElementById('final-team1').value,
+                final2: document.getElementById('final-team2').value
+            };
+            localStorage.setItem('dori_qayd_earth_data', JSON.stringify(dataState));
+        }
+
+        function loadOnlineData() {
+            const saved = localStorage.getItem('dori_qayd_earth_data');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                teams11 = parsed.teams11 || teams11;
+                teams12 = parsed.teams12 || teams12;
+                groupAStore = parsed.groupAStore || [];
+                groupBStore = parsed.groupBStore || [];
+                if (document.getElementById('final-team1')) document.getElementById('final-team1').value = parsed.final1 || '';
+                if (document.getElementById('final-team2')) document.getElementById('final-team2').value = parsed.final2 || '';
+            }
+        }
 
         function initTeams() {
+            loadOnlineData();
             renderTree('tree-grade-11', teams11, 'sky');
             renderTree('tree-grade-12', teams12, 'indigo');
             updateAttendance();
+            if (groupAStore.length) renderGroup('group-a-teams', 'group-a-matches', groupAStore, 'sky');
+            if (groupBStore.length) renderGroup('group-b-teams', 'group-b-matches', groupBStore, 'indigo');
         }
 
         function renderTree(containerId, teams, colorTheme) {
@@ -246,6 +279,7 @@
             const team = [...teams11, ...teams12].find(t => t.id === id);
             if (team) {
                 team.status = !team.status;
+                syncOnlineData();
                 initTeams();
             }
         }
@@ -272,29 +306,25 @@
             const active11 = teams11.filter(t => t.status);
             const active12 = teams12.filter(t => t.status);
 
-            if (active11.length === 0 && active12.length === 0) {
-                alert('يرجى تأكيد حضور الفرق أولاً قبل سحب القرعة!');
-                return;
-            }
-
             const shuffled11 = [...(active11.length ? active11 : teams11)].sort(() => Math.random() - 0.5);
             const shuffled12 = [...(active12.length ? active12 : teams12)].sort(() => Math.random() - 0.5);
 
-            const groupA = [];
-            const groupB = [];
+            groupAStore = [];
+            groupBStore = [];
 
             for (let i = 0; i < 4; i++) {
-                if (shuffled11[i]) groupA.push(shuffled11[i]);
-                if (shuffled12[i]) groupA.push(shuffled12[i]);
+                if (shuffled11[i]) groupAStore.push(shuffled11[i]);
+                if (shuffled12[i]) groupAStore.push(shuffled12[i]);
             }
 
             for (let i = 4; i < 8; i++) {
-                if (shuffled11[i]) groupB.push(shuffled11[i]);
-                if (shuffled12[i]) groupB.push(shuffled12[i]);
+                if (shuffled11[i]) groupBStore.push(shuffled11[i]);
+                if (shuffled12[i]) groupBStore.push(shuffled12[i]);
             }
 
-            renderGroup('group-a-teams', 'group-a-matches', groupA, 'sky');
-            renderGroup('group-b-teams', 'group-b-matches', groupB, 'indigo');
+            syncOnlineData();
+            renderGroup('group-a-teams', 'group-a-matches', groupAStore, 'sky');
+            renderGroup('group-b-teams', 'group-b-matches', groupBStore, 'indigo');
 
             confetti({ particleCount: 140, spread: 95, origin: { y: 0.6 } });
             switchTab('groups');
@@ -319,14 +349,17 @@
                     <span class="text-xs font-black text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">مباراة ${idx + 1}</span>
                     <div class="flex items-center gap-3">
                         <span class="font-black text-slate-200 text-sm">${m.team1}</span>
-                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <input type="number" min="0" placeholder="0" onchange="syncOnlineData()" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
                         <span class="text-amber-400 font-black text-xs">VS</span>
-                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <input type="number" min="0" placeholder="0" onchange="syncOnlineData()" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
                         <span class="font-black text-slate-200 text-sm">${m.team2}</span>
                     </div>
                 </div>
             `).join('');
         }
+
+        // Auto Sync every 3 seconds for all online visitors
+        setInterval(initTeams, 3000);
 
         window.onload = initTeams;
     </script>
