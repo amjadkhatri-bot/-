@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDK for Realtime Online Sync -->
+    <!-- Firebase SDKs for Realtime Online Database Sync -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -49,8 +49,8 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-xl sm:text-2xl font-black gradient-gold tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
-                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
-                            <i class="fa-solid fa-signal text-[8px]"></i> أونلاين مباشر
+                        <span id="sync-status" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                            <i class="fa-solid fa-signal text-[8px]"></i> متصل سحابياً أونلاين
                         </span>
                     </div>
                     <p class="text-xs text-slate-400 font-bold flex items-center gap-2 mt-0.5">
@@ -81,16 +81,16 @@
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تأكيد الحضور الرسمي (مباشر لكل الأجهزة)</span>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تزامن حي ومباشر بين جميع الأجهزة</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
-                    <p class="text-slate-400 text-sm mt-1">أي تغيير تقوم به يظهر فوراً في جميع أجهزة الطلاب والمعلمين</p>
+                    <p class="text-slate-400 text-sm mt-1">أي زر تضغط عليه يتغير فوراً في جميع هواتف وأجهزة الحاضرين</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
                         الحاضرون: 0 / 16
                     </div>
                     <button onclick="runDraw()" class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:shadow-amber-500/30 transition-all transform hover:-translate-y-1 active:translate-y-0 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-dice text-lg"></i> سحب القرعة العشوائية
+                        <i class="fa-solid fa-dice text-lg"></i> سحب القرعة المباشرة للجميع
                     </button>
                 </div>
             </div>
@@ -140,7 +140,7 @@
             <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                 <div>
                     <h2 class="text-2xl font-black text-amber-400">جدول المواجهات (11 ضد 12)</h2>
-                    <p class="text-xs text-slate-400">جدول قرعة المجموعتين الحية مع النتائج التفاعلية</p>
+                    <p class="text-xs text-slate-400">جدول القرعة التفاعلي أونلاين لمتابعة الأهداف والنتائج حيّة</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
@@ -188,11 +188,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-sky-400 mb-2">بطل المجموعة الأولى (أ)</label>
-                            <input type="text" id="final-team1" onchange="syncOnlineData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team1" oninput="saveToCloud()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-indigo-400 mb-2">بطل المجموعة الثانية (ب)</label>
-                            <input type="text" id="final-team2" onchange="syncOnlineData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team2" oninput="saveToCloud()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                     </div>
 
@@ -215,42 +215,50 @@
         </div>
     </footer>
 
-    <!-- Logic Script with Online Live Synchronization -->
+    <!-- Logic Script with Firebase Realtime Sync -->
     <script>
-        // Default teams state
+        // 1. Firebase Live Realtime Database Setup
+        const firebaseConfig = {
+            databaseURL: "https://dori-qayd-earth-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database().ref("tournament_state");
+
         let teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
         let teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
         let groupAStore = [];
         let groupBStore = [];
 
-        // Local Storage Online Fallback Sync across tabs/devices
-        function syncOnlineData() {
-            const dataState = {
+        // Save State to Cloud Database for All Devices
+        function saveToCloud() {
+            const dataToSave = {
                 teams11,
                 teams12,
                 groupAStore,
                 groupBStore,
-                final1: document.getElementById('final-team1').value,
-                final2: document.getElementById('final-team2').value
+                final1: document.getElementById('final-team1')?.value || '',
+                final2: document.getElementById('final-team2')?.value || ''
             };
-            localStorage.setItem('dori_qayd_earth_data', JSON.stringify(dataState));
+            db.set(dataToSave);
         }
 
-        function loadOnlineData() {
-            const saved = localStorage.getItem('dori_qayd_earth_data');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                teams11 = parsed.teams11 || teams11;
-                teams12 = parsed.teams12 || teams12;
-                groupAStore = parsed.groupAStore || [];
-                groupBStore = parsed.groupBStore || [];
-                if (document.getElementById('final-team1')) document.getElementById('final-team1').value = parsed.final1 || '';
-                if (document.getElementById('final-team2')) document.getElementById('final-team2').value = parsed.final2 || '';
+        // Listen for Realtime Changes from Cloud across ALL Devices
+        db.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.teams11) teams11 = data.teams11;
+                if (data.teams12) teams12 = data.teams12;
+                if (data.groupAStore) groupAStore = data.groupAStore;
+                if (data.groupBStore) groupBStore = data.groupBStore;
+                
+                if (document.getElementById('final-team1') && data.final1 !== undefined) document.getElementById('final-team1').value = data.final1;
+                if (document.getElementById('final-team2') && data.final2 !== undefined) document.getElementById('final-team2').value = data.final2;
+
+                renderUI();
             }
-        }
+        });
 
-        function initTeams() {
-            loadOnlineData();
+        function renderUI() {
             renderTree('tree-grade-11', teams11, 'sky');
             renderTree('tree-grade-12', teams12, 'indigo');
             updateAttendance();
@@ -279,8 +287,7 @@
             const team = [...teams11, ...teams12].find(t => t.id === id);
             if (team) {
                 team.status = !team.status;
-                syncOnlineData();
-                initTeams();
+                saveToCloud();
             }
         }
 
@@ -322,10 +329,7 @@
                 if (shuffled12[i]) groupBStore.push(shuffled12[i]);
             }
 
-            syncOnlineData();
-            renderGroup('group-a-teams', 'group-a-matches', groupAStore, 'sky');
-            renderGroup('group-b-teams', 'group-b-matches', groupBStore, 'indigo');
-
+            saveToCloud();
             confetti({ particleCount: 140, spread: 95, origin: { y: 0.6 } });
             switchTab('groups');
         }
@@ -349,19 +353,16 @@
                     <span class="text-xs font-black text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">مباراة ${idx + 1}</span>
                     <div class="flex items-center gap-3">
                         <span class="font-black text-slate-200 text-sm">${m.team1}</span>
-                        <input type="number" min="0" placeholder="0" onchange="syncOnlineData()" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
                         <span class="text-amber-400 font-black text-xs">VS</span>
-                        <input type="number" min="0" placeholder="0" onchange="syncOnlineData()" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
                         <span class="font-black text-slate-200 text-sm">${m.team2}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Auto Sync every 3 seconds for all online visitors
-        setInterval(initTeams, 3000);
-
-        window.onload = initTeams;
+        window.onload = renderUI;
     </script>
 </body>
 </html>
