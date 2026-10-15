@@ -14,7 +14,7 @@
             background: radial-gradient(circle at center, rgba(30, 27, 75, 0.8) 0%, rgba(3, 7, 18, 0.98) 100%),
                         linear-gradient(to right, rgba(220, 38, 38, 0.15), rgba(30, 58, 138, 0.15));
         }
-        .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #b45309); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
@@ -53,7 +53,7 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
 
-        <!-- TAB 1: ATTENDANCE (Default: All Absent) -->
+        <!-- TAB 1: ATTENDANCE -->
         <section id="tab-checkin" class="space-y-6">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
@@ -133,7 +133,7 @@
             </div>
         </section>
 
-        <!-- TAB 3: WORLD CUP STYLE BRACKET (ثيمة المونديال) -->
+        <!-- TAB 3: WORLD CUP STYLE BRACKET -->
         <section id="tab-bracket" class="hidden space-y-8">
             <!-- Qualifiers Selector -->
             <div class="glass-panel p-6 rounded-3xl border border-amber-500/30">
@@ -180,7 +180,7 @@
                 <!-- Symmetric Bracket Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
                     
-                    <!-- Left Branch (Blue Side / Group A) -->
+                    <!-- Left Branch -->
                     <div class="space-y-6">
                         <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-1.5 rounded-full border border-blue-500/20">المسار الأزرق (أ)</div>
                         <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-blue-500/50 shadow-lg text-center">
@@ -204,7 +204,7 @@
                         </div>
                     </div>
 
-                    <!-- Right Branch (Red Side / Group B) -->
+                    <!-- Right Branch -->
                     <div class="space-y-6">
                         <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-1.5 rounded-full border border-red-500/20">المسار الأحمر (ب)</div>
                         <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-red-500/50 shadow-lg text-center">
@@ -233,7 +233,6 @@
 
     <!-- Logic Script -->
     <script>
-        // Restored original team names format (11/1 to 11/8 and 12/1 to 12/8)
         const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
         const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
 
@@ -249,7 +248,7 @@
         function renderList(containerId, teams) {
             const container = document.getElementById(containerId);
             container.innerHTML = teams.map(t => `
-                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${t.status ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-500 hover:border-slate-700'}">
+                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${t.status ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300 shadow-lg' : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700'}">
                     <span class="font-bold text-sm">${t.name}</span>
                     <span class="text-xs font-black px-2.5 py-1 rounded-xl ${t.status ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-500'}">${t.status ? 'حاضر ✓' : 'غائب ✗'}</span>
                 </div>
