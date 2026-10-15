@@ -11,11 +11,26 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f8fafc; }
         .world-cup-bg {
-            background: radial-gradient(circle at center, rgba(30, 27, 75, 0.9) 0%, rgba(3, 7, 18, 0.99) 100%),
-                        linear-gradient(to right, rgba(220, 38, 38, 0.12), rgba(30, 58, 138, 0.12));
+            background: radial-gradient(circle at center, rgba(30, 27, 75, 0.95) 0%, rgba(3, 7, 18, 0.99) 100%),
+                        linear-gradient(to right, rgba(220, 38, 38, 0.15), rgba(30, 58, 138, 0.15));
         }
-        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #b45309); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+        .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Realistic Luxury Trophy Styling */
+        .trophy-container {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.1) 50%, transparent 80%);
+            box-shadow: 0 0 70px rgba(245, 158, 11, 0.35), inset 0 0 30px rgba(254, 240, 138, 0.2);
+            border: 2px solid rgba(245, 158, 11, 0.5);
+        }
+        .realistic-trophy {
+            filter: drop-shadow(0 15px 25px rgba(245, 158, 11, 0.6)) drop-shadow(0 0 10px rgba(254, 240, 138, 0.8));
+            animation: floatTrophy 4s ease-in-out infinite;
+        }
+        @keyframes floatTrophy {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 world-cup-bg">
@@ -41,7 +56,7 @@
                     1. شجرة المونديال والحضور 🏆
                 </button>
                 <button onclick="switchTab('groups')" id="btn-groups" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
-                    2. جدول المجموعات
+                    2. جدول المجموعات المباريات (8)
                 </button>
             </div>
         </div>
@@ -50,13 +65,13 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
 
-        <!-- TAB 1: WORLD CUP TREE CHECK-IN (شجرة المونديال للحضور) -->
+        <!-- TAB 1: WORLD CUP TREE CHECK-IN -->
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
                     <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">نظام المونديال الرسمي</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">شجرة تأكيد حضور الفرق (16 فريقاً)</h2>
-                    <p class="text-slate-400 text-sm mt-1">اضغط على أي فريق في المسارين لتأكيد حضوره (غائب افتراضياً ويتحول لأخضر عند الحضور)</p>
+                    <p class="text-slate-400 text-sm mt-1">اضغط على أي فريق لتأكيد حضوره (غائب افتراضياً ويتحول لأخضر عند الحضور)</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
@@ -68,33 +83,33 @@
                 </div>
             </div>
 
-            <!-- WORLD CUP TREE LAYOUT FOR TEAMS CHECK-IN -->
+            <!-- WORLD CUP TREE LAYOUT FOR TEAMS CHECK-IN WITH REALISTIC TROPHY -->
             <div class="glass-panel p-6 sm:p-10 rounded-3xl relative overflow-hidden border border-slate-800">
                 <div class="text-center mb-8">
                     <h3 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase">الطريق إلى نهائي المونديال</h3>
-                    <p class="text-xs text-amber-400 font-bold mt-1">المسار الأيمن والمسار الأيسر يحيطان بكأس البطولة</p>
+                    <p class="text-xs text-amber-400 font-bold mt-1">المسار الأيمن والمسار الأيسر يحيطان بكأس البطولة الذهبي الفاخر</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-7xl mx-auto">
                     
-                    <!-- Left Side (Teams 1 to 8 - المسار الأيسر) -->
+                    <!-- Left Side (Teams 1 to 8) -->
                     <div class="space-y-3">
                         <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-2 text-center rounded-full border border-blue-500/20 mb-4">المسار الأيسر (الفرق 1 - 8)</div>
                         <div id="tree-left-side" class="space-y-2.5"></div>
                     </div>
 
-                    <!-- Center Trophy & World Cup Emblem -->
+                    <!-- Center Realistic Luxury Trophy Section -->
                     <div class="flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
-                        <div class="w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-gradient-to-b from-amber-400/20 via-amber-500/10 to-transparent p-4 border-2 border-amber-500/40 flex items-center justify-center relative shadow-[0_0_60px_rgba(245,158,11,0.3)]">
-                            <span class="text-8xl sm:text-9xl filter drop-shadow-[0_0_35px_rgba(245,158,11,0.8)] animate-pulse">🏆</span>
+                        <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full trophy-container p-4 flex items-center justify-center relative">
+                            <span class="text-8xl sm:text-9xl realistic-trophy select-none">🏆</span>
                         </div>
-                        <div class="bg-slate-950/90 border border-amber-500/40 p-4 rounded-2xl text-center w-full shadow-2xl">
-                            <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">كأس دوري قيد الأرض</span>
-                            <div class="text-sm font-black text-white mt-1">WORLD CUP 2026-2027</div>
+                        <div class="bg-slate-950/95 border border-amber-500/50 p-4 rounded-2xl text-center w-full shadow-2xl">
+                            <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">الكأس الذهبي الرسمي</span>
+                            <div class="text-sm font-black text-white mt-1">WORLD CUP TROPHY 2026</div>
                         </div>
                     </div>
 
-                    <!-- Right Side (Teams 9 to 16 - المسار الأيمن) -->
+                    <!-- Right Side (Teams 9 to 16) -->
                     <div class="space-y-3">
                         <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-2 text-center rounded-full border border-red-500/20 mb-4">المسار الأيمن (الفرق 9 - 16)</div>
                         <div id="tree-right-side" class="space-y-2.5"></div>
@@ -104,46 +119,52 @@
             </div>
         </section>
 
-        <!-- TAB 2: GROUPS & MATCHES -->
+        <!-- TAB 2: GROUPS & 8 MATCHES -->
         <section id="tab-groups" class="hidden space-y-8">
             <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                 <div>
-                    <h2 class="text-2xl font-black text-amber-400">جدول المجموعات ومواجهات البطولة</h2>
-                    <p class="text-xs text-slate-400">توزيع الفرق بناءً على قرعة المونديال</p>
+                    <h2 class="text-2xl font-black text-amber-400">جدول المجموعات ومباريات البطولة (8 مباريات لكل مجموعة)</h2>
+                    <p class="text-xs text-slate-400">توزيع الـ 16 فريقاً على مجموعتين بدقة</p>
                 </div>
                 <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
                     <i class="fa-solid fa-print"></i> طباعة
                 </button>
             </div>
 
-            <!-- World Cup Banner with Center Trophy -->
+            <!-- Groups Banner with Realistic Trophy -->
             <div class="glass-panel p-6 rounded-3xl text-center relative overflow-hidden border border-amber-500/30">
                 <h3 class="text-2xl font-black text-white tracking-widest uppercase mb-1">قرعة المجموعات الرسمية</h3>
                 <div class="flex justify-center items-center my-4">
-                    <span class="text-5xl filter drop-shadow-[0_0_15px_rgba(245,158,11,0.7)]">🏆</span>
+                    <span class="text-6xl realistic-trophy select-none">🏆</span>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                     <div>
-                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-2 rounded-full border border-blue-500/20 mb-3">المجموعة الأولى (أ)</div>
+                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-2 rounded-full border border-blue-500/20 mb-3">المجموعة الأولى (أ) - 8 فرق</div>
                         <div id="group-a-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
                     </div>
                     <div>
-                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-2 rounded-full border border-red-500/20 mb-3">المجموعة الثانية (ب)</div>
+                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-2 rounded-full border border-red-500/20 mb-3">المجموعة الثانية (ب) - 8 فرق</div>
                         <div id="group-b-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Group Matches Tables -->
+            <!-- 8 Matches Tables for Each Group -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-blue-500">
-                    <h3 class="text-lg font-black text-blue-400 mb-3">مواجهات المجموعة الأولى (أ)</h3>
-                    <div id="group-a-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
+                    <h3 class="text-lg font-black text-blue-400 mb-3 flex justify-between items-center">
+                        <span>مباريات المجموعة الأولى (أ)</span>
+                        <span class="text-xs bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full">8 مباريات</span>
+                    </h3>
+                    <div id="group-a-matches" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs"></div>
                 </div>
 
                 <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-red-500">
-                    <h3 class="text-lg font-black text-red-400 mb-3">مواجهات المجموعة الثانية (ب)</h3>
-                    <div id="group-b-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
+                    <h3 class="text-lg font-black text-red-400 mb-3 flex justify-between items-center">
+                        <span>مباريات المجموعة الثانية (ب)</span>
+                        <span class="text-xs bg-red-500/10 text-red-300 px-3 py-1 rounded-full">8 مباريات</span>
+                    </h3>
+                    <div id="group-b-matches" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs"></div>
                 </div>
             </div>
         </section>
@@ -160,7 +181,6 @@
 
     <!-- Logic Script -->
     <script>
-        // 16 Teams combining 11th and 12th grades
         const allTeams = [
             { id: 't1', name: '11 / 1', status: false },
             { id: 't2', name: '11 / 2', status: false },
@@ -251,36 +271,36 @@
             groupAStore = shuffled.slice(0, mid);
             groupBStore = shuffled.slice(mid);
 
-            renderGroup('group-a-teams', 'group-a-matches', groupAStore, 'blue');
-            renderGroup('group-b-teams', 'group-b-matches', groupBStore, 'red');
+            renderGroupWith8Matches('group-a-teams', 'group-a-matches', groupAStore, 'blue');
+            renderGroupWith8Matches('group-b-teams', 'group-b-matches', groupBStore, 'red');
 
-            confetti({ particleCount: 130, spread: 90, origin: { y: 0.6 } });
+            confetti({ particleCount: 140, spread: 95, origin: { y: 0.6 } });
             switchTab('groups');
         }
 
-        function renderGroup(teamsContainerId, matchesContainerId, teams, colorTheme) {
+        function renderGroupWith8Matches(teamsContainerId, matchesContainerId, teams, colorTheme) {
             const borderColor = colorTheme === 'blue' ? 'border-blue-500/40 text-blue-200' : 'border-red-500/40 text-red-200';
             
             document.getElementById(teamsContainerId).innerHTML = teams.map(t => `
                 <div class="bg-slate-900/90 p-2.5 rounded-xl border ${borderColor} text-center font-black text-xs sm:text-sm shadow-md">${t.name}</div>
             `).join('');
 
+            // Generate exactly 8 matches or round-robin rotation up to 8 matches for the group
             const matches = [];
-            for (let i = 0; i < teams.length; i++) {
-                for (let j = i + 1; j < teams.length; j++) {
+            let matchCount = 0;
+            for (let i = 0; i < teams.length && matchCount < 8; i++) {
+                for (let j = i + 1; j < teams.length && matchCount < 8; j++) {
                     matches.push({ team1: teams[i].name, team2: teams[j].name });
+                    matchCount++;
                 }
             }
+            // If fewer than 8 teams/combinations, loop through to complete 8 total fixtures for excitement
+            let extraIdx = 0;
+            while(matches.length < 8 && teams.length >= 2) {
+                let t1 = teams[extraIdx % teams.length].name;
+                let t2 = teams[(extraIdx + 2) % teams.length].name;
+                matches.push({ team1: t1, team2: t2 });
+                extraIdx++;
+            }
 
-            document.getElementById(matchesContainerId).innerHTML = matches.map((m, idx) => `
-                <div class="bg-slate-950/50 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center px-3">
-                    <span class="text-[10px] text-slate-500 font-bold">مباراة ${idx + 1}</span>
-                    <span class="font-black text-slate-200">${m.team1} <span class="text-amber-400 mx-1">VS</span> ${m.team2}</span>
-                </div>
-            `).join('');
-        }
-
-        window.onload = initTeams;
-    </script>
-</body>
-</html>
+            document.getElementById(matches
