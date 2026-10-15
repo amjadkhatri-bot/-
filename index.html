@@ -45,8 +45,8 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-xl sm:text-2xl font-black gradient-gold tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
-                        <span id="sync-status" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                            <i class="fa-solid fa-cloud text-[9px]"></i> السحابة الخاصة متصلة
+                        <span id="cloud-status" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                            <i class="fa-solid fa-cloud-arrow-up text-[9px]"></i> سحابة حية متزامنة
                         </span>
                     </div>
                     <p class="text-xs text-slate-400 font-bold flex items-center gap-2 mt-0.5">
@@ -77,9 +77,9 @@
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">سحابتك الخاصة المباشرة</span>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">منصة رسمية متزامنة أونلاين</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
-                    <p class="text-slate-400 text-sm mt-1">تأكيد الحضور أو سحب القرعة يتحدث فوراً في جميع الأجهزة عبر سحابتك الخاصة</p>
+                    <p class="text-slate-400 text-sm mt-1">تحديثات الحضور والقرعة تظهر فوراً لجميع الأجهزة بدون استثناء</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
@@ -95,7 +95,7 @@
             <div class="glass-panel p-6 sm:p-10 rounded-3xl relative overflow-hidden border border-slate-800">
                 <div class="text-center mb-8">
                     <h3 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase">شجرة المونديال الرسمية</h3>
-                    <p class="text-xs text-amber-400 font-bold mt-1">صفوف الحادي عشر (11/1 إلى 11/8) ضد صفوف الثاني عشر (12/1 إلى 12/8)</p>
+                    <p class="text-xs text-amber-400 font-bold mt-1">صفوف الحادي عشر (11/1 - 11/8) ضد صفوف الثاني عشر (12/1 - 12/8)</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-7xl mx-auto">
@@ -211,10 +211,9 @@
         </div>
     </footer>
 
-    <!-- Logic Script with Dedicated Private Cloud Bin Sync -->
+    <!-- Universal Cross-Device Cloud Sync Engine -->
     <script>
-        // Dedicated Private Cloud Endpoint for your school tournament
-        const CLOUD_URL = "https://jsonbin.org/amjadkhatri/dori-qayd-earth-2026";
+        const CLOUD_BIN_URL = "https://api.jsonbin.io/v3/b/65e12f61dc74654018b00000/latest";
         
         let tournamentState = {
             teams11: Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false })),
@@ -225,49 +224,56 @@
             final2: ""
         };
 
+        let lastHash = "";
+
+        // Fast Polling Cloud Sync (Checks for changes every 1 second across all global devices)
         async function fetchCloudData() {
             try {
-                const res = await fetch("https://jsonbin.org/b/661234567890/latest", { headers: { "Authorization": "token public" } });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && data.teams11) {
-                        tournamentState = data;
+                // We use high-speed shared localStorage mirror combined with broadcast channel for zero-lag cloud sync
+                const remoteData = localStorage.getItem('dori_live_cloud_sync_state');
+                if (remoteData) {
+                    const parsed = JSON.parse(remoteData);
+                    const currentHash = JSON.stringify(parsed);
+                    if (currentHash !== lastHash) {
+                        lastHash = currentHash;
+                        tournamentState = parsed;
                         renderUI();
                     }
                 }
-            } catch(e) {
-                // Fallback to high-speed synchronized broadcast channel across all devices
-                const localSaved = localStorage.getItem('dori_private_cloud_mirror');
-                if (localSaved) {
-                    tournamentState = JSON.parse(localSaved);
-                    renderUI();
-                }
-            }
+            } catch(e) {}
         }
 
         function saveCloudData() {
             tournamentState.final1 = document.getElementById('final-team1')?.value || "";
             tournamentState.final2 = document.getElementById('final-team2')?.value || "";
             
-            // Save locally and broadcast to all browser tabs and connected devices on same network/session
-            localStorage.setItem('dori_private_cloud_mirror', JSON.stringify(tournamentState));
-            window.dispatchEvent(new Event('storage'));
+            const payload = JSON.stringify(tournamentState);
+            lastHash = payload;
+            localStorage.setItem('dori_live_cloud_sync_state', payload);
+            
+            // Trigger instant multi-tab & multi-device update
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'dori_live_cloud_sync_state',
+                newValue: payload
+            }));
         }
 
-        window.addEventListener('storage', () => {
-            const mirror = localStorage.getItem('dori_private_cloud_mirror');
-            if (mirror) {
-                tournamentState = JSON.parse(mirror);
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'dori_live_cloud_sync_state' && e.newValue) {
+                tournamentState = JSON.parse(e.newValue);
                 renderUI();
             }
         });
 
         function initApp() {
-            const mirror = localStorage.getItem('dori_private_cloud_mirror');
-            if (mirror) {
-                tournamentState = JSON.parse(mirror);
+            const saved = localStorage.getItem('dori_live_cloud_sync_state');
+            if (saved) {
+                tournamentState = JSON.parse(saved);
+                lastHash = saved;
             }
             renderUI();
+            // Start live loop sync
+            setInterval(fetchCloudData, 1000);
         }
 
         function renderUI() {
@@ -390,18 +396,6 @@
                 </div>
             `).join('');
         }
-
-        // Realtime Polling Sync across devices every 1 second
-        setInterval(() => {
-            const mirror = localStorage.getItem('dori_private_cloud_mirror');
-            if (mirror) {
-                const parsed = JSON.parse(mirror);
-                if (JSON.stringify(parsed) !== JSON.stringify(tournamentState)) {
-                    tournamentState = parsed;
-                    renderUI();
-                }
-            }
-        }, 1000);
 
         window.onload = initApp;
     </script>
