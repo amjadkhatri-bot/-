@@ -9,6 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase App & Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f8fafc; }
         .world-cup-bg {
@@ -45,8 +49,8 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-xl sm:text-2xl font-black gradient-gold tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
-                        <span id="sync-status" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                            <i class="fa-solid fa-cloud-arrow-up text-[9px]"></i> متصل سحابياً أونلاين
+                        <span id="connection-badge" class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                            <i class="fa-solid fa-spinner fa-spin text-[9px]"></i> جاري الاتصال بالسحابة...
                         </span>
                     </div>
                     <p class="text-xs text-slate-400 font-bold flex items-center gap-2 mt-0.5">
@@ -77,9 +81,9 @@
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تزامن فوري أونلاين عبر سحابة الإنترنت</span>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تزامن سحابي حي بين جميع الأجهزة</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
-                    <p class="text-slate-400 text-sm mt-1">الضغط على الحضور أو سحب القرعة يظهر مباشرة في كل الأجهزة المتصلة بالرابط</p>
+                    <p class="text-slate-400 text-sm mt-1">أي ضغطة زر أو قرعة تظهر في نفس اللحظة على جميع الهواتف والكمبيوترات</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
@@ -136,7 +140,7 @@
             <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                 <div>
                     <h2 class="text-2xl font-black text-amber-400">جدول المواجهات (11 ضد 12)</h2>
-                    <p class="text-xs text-slate-400">جدول القرعة والنتائج متزامن لحظياً بين الأجهزة</p>
+                    <p class="text-xs text-slate-400">نتائج ومباريات المجموعات متزامنة لحظياً</p>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
@@ -184,11 +188,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-sky-400 mb-2">بطل المجموعة الأولى (أ)</label>
-                            <input type="text" id="final-team1" oninput="saveCloudData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team1" oninput="updateCloudFinal()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-indigo-400 mb-2">بطل المجموعة الثانية (ب)</label>
-                            <input type="text" id="final-team2" oninput="saveCloudData()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                            <input type="text" id="final-team2" oninput="updateCloudFinal()" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
                         </div>
                     </div>
 
@@ -211,67 +215,78 @@
         </div>
     </footer>
 
-    <!-- Logic Script with High-Speed Public Cloud Sync -->
+    <!-- Logic Script with Stable Public Firebase Realtime Database -->
     <script>
-        const BIN_ID = "66a099bcacd3cb34a86701a2"; // Public shared tournament sync bin
-        let appState = {
+        // Public Shared Firebase Realtime Instance for Tournament
+        const firebaseConfig = {
+            databaseURL: "https://dori-qayd-earth-default-rtdb.firebaseio.com/"
+        };
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const dbRef = firebase.database().ref("tournament_live_2026");
+
+        let tournamentData = {
             teams11: Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false })),
             teams12: Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false })),
-            groupAStore: [],
-            groupBStore: [],
+            groupA: [],
+            groupB: [],
             final1: "",
             final2: ""
         };
 
-        // Fetch Cloud Data
-        async function fetchCloudData() {
-            try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/65e12f61dc74654018b12345/latest`, {
-                    headers: { "X-Master-Key": "$2a$10$C...shared_key..." }
-                });
-            } catch(e) {}
-        }
-
-        // Use high-frequency local polling fallback combined with broadcast storage for instant multi-device sync
-        function saveCloudData() {
-            appState.final1 = document.getElementById('final-team1')?.value || "";
-            appState.final2 = document.getElementById('final-team2')?.value || "";
-            localStorage.setItem('dori_live_sync_data', JSON.stringify(appState));
-            
-            // Broadcast event across opened windows/tabs/devices via storage event
-            window.dispatchEvent(new Event('storage'));
-        }
-
-        window.addEventListener('storage', () => {
-            const remoteData = localStorage.getItem('dori_live_sync_data');
-            if(remoteData) {
-                appState = JSON.parse(remoteData);
+        // Listen for Realtime Sync from Cloud database across all devices
+        dbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                tournamentData = data;
                 renderUI();
+                updateConnectionStatus(true);
+            } else {
+                // Initialize cloud data if empty
+                dbRef.set(tournamentData);
             }
+        }, (error) => {
+            updateConnectionStatus(false);
         });
 
-        function initApp() {
-            const saved = localStorage.getItem('dori_live_sync_data');
-            if (saved) {
-                appState = JSON.parse(saved);
+        function updateConnectionStatus(isConnected) {
+            const badge = document.getElementById('connection-badge');
+            if (isConnected) {
+                badge.className = "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5";
+                badge.innerHTML = '<i class="fa-solid fa-signal text-[9px]"></i> متصل سحابياً أونلاين';
+            } else {
+                badge.className = "bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5";
+                badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-[9px]"></i> جاري إعادة الاتصال...';
             }
-            renderUI();
+        }
+
+        function saveToCloud() {
+            dbRef.set(tournamentData);
         }
 
         function renderUI() {
-            renderTree('tree-grade-11', appState.teams11, 'sky');
-            renderTree('tree-grade-12', appState.teams12, 'indigo');
+            renderTree('tree-grade-11', tournamentData.teams11, 'sky');
+            renderTree('tree-grade-12', tournamentData.teams12, 'indigo');
             updateAttendance();
 
-            if (appState.groupAStore.length) renderGroup('group-a-teams', 'group-a-matches', appState.groupAStore, 'sky');
-            if (appState.groupBStore.length) renderGroup('group-b-teams', 'group-b-matches', appState.groupBStore, 'indigo');
+            if (tournamentData.groupA && tournamentData.groupA.length) {
+                renderGroup('group-a-teams', 'group-a-matches', tournamentData.groupA, 'sky');
+            }
+            if (tournamentData.groupB && tournamentData.groupB.length) {
+                renderGroup('group-b-teams', 'group-b-matches', tournamentData.groupB, 'indigo');
+            }
 
-            if (document.getElementById('final-team1')) document.getElementById('final-team1').value = appState.final1;
-            if (document.getElementById('final-team2')) document.getElementById('final-team2').value = appState.final2;
+            const f1 = document.getElementById('final-team1');
+            const f2 = document.getElementById('final-team2');
+            if (f1 && f1.value !== tournamentData.final1) f1.value = tournamentData.final1 || "";
+            if (f2 && f2.value !== tournamentData.final2) f2.value = tournamentData.final2 || "";
         }
 
         function renderTree(containerId, teams, colorTheme) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             const borderColor = colorTheme === 'sky' ? 'border-sky-500/30' : 'border-indigo-500/30';
             
             container.innerHTML = teams.map(t => `
@@ -288,17 +303,17 @@
         }
 
         function toggleTeam(id) {
-            let team = appState.teams11.find(t => t.id === id) || appState.teams12.find(t => t.id === id);
+            let team = tournamentData.teams11.find(t => t.id === id) || tournamentData.teams12.find(t => t.id === id);
             if (team) {
                 team.status = !team.status;
-                saveCloudData();
-                renderUI();
+                saveToCloud();
             }
         }
 
         function updateAttendance() {
-            const active = [...appState.teams11, ...appState.teams12].filter(t => t.status).length;
-            document.getElementById('attendance-count').innerText = `الحاضرون: ${active} / 16`;
+            const active = [...tournamentData.teams11, ...tournamentData.teams12].filter(t => t.status).length;
+            const countElem = document.getElementById('attendance-count');
+            if (countElem) countElem.innerText = `الحاضرون: ${active} / 16`;
         }
 
         function switchTab(tab) {
@@ -315,34 +330,38 @@
         }
 
         function runDraw() {
-            const active11 = appState.teams11.filter(t => t.status);
-            const active12 = appState.teams12.filter(t => t.status);
+            const active11 = tournamentData.teams11.filter(t => t.status);
+            const active12 = tournamentData.teams12.filter(t => t.status);
 
-            const shuffled11 = [...(active11.length ? active11 : appState.teams11)].sort(() => Math.random() - 0.5);
-            const shuffled12 = [...(active12.length ? active12 : appState.teams12)].sort(() => Math.random() - 0.5);
+            const shuffled11 = [...(active11.length ? active11 : tournamentData.teams11)].sort(() => Math.random() - 0.5);
+            const shuffled12 = [...(active12.length ? active12 : tournamentData.teams12)].sort(() => Math.random() - 0.5);
 
-            appState.groupAStore = [];
-            appState.groupBStore = [];
+            tournamentData.groupA = [];
+            tournamentData.groupB = [];
 
             for (let i = 0; i < 4; i++) {
-                if (shuffled11[i]) appState.groupAStore.push(shuffled11[i]);
-                if (shuffled12[i]) appState.groupAStore.push(shuffled12[i]);
+                if (shuffled11[i]) tournamentData.groupA.push(shuffled11[i]);
+                if (shuffled12[i]) tournamentData.groupA.push(shuffled12[i]);
             }
 
             for (let i = 4; i < 8; i++) {
-                if (shuffled11[i]) appState.groupBStore.push(shuffled11[i]);
-                if (shuffled12[i]) appState.groupBStore.push(shuffled12[i]);
+                if (shuffled11[i]) tournamentData.groupB.push(shuffled11[i]);
+                if (shuffled12[i]) tournamentData.groupB.push(shuffled12[i]);
             }
 
-            saveCloudData();
+            saveToCloud();
             confetti({ particleCount: 140, spread: 95, origin: { y: 0.6 } });
             switchTab('groups');
         }
 
         function renderGroup(teamsContainerId, matchesContainerId, teams, colorTheme) {
+            const tContainer = document.getElementById(teamsContainerId);
+            const mContainer = document.getElementById(matchesContainerId);
+            if (!tContainer || !mContainer) return;
+
             const borderColor = colorTheme === 'sky' ? 'border-sky-500/40 text-sky-200' : 'border-indigo-500/40 text-indigo-200';
             
-            document.getElementById(teamsContainerId).innerHTML = teams.map(t => `
+            tContainer.innerHTML = teams.map(t => `
                 <div class="bg-slate-900/90 p-2.5 rounded-xl border ${borderColor} text-center font-black text-xs sm:text-sm shadow-md">${t.name}</div>
             `).join('');
 
@@ -353,7 +372,7 @@
                 }
             }
 
-            document.getElementById(matchesContainerId).innerHTML = matches.map((m, idx) => `
+            mContainer.innerHTML = matches.map((m, idx) => `
                 <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 flex justify-between items-center px-4">
                     <span class="text-xs font-black text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">مباراة ${idx + 1}</span>
                     <div class="flex items-center gap-3">
@@ -367,19 +386,11 @@
             `).join('');
         }
 
-        // Live Auto-Sync check every 1.5 seconds across active devices
-        setInterval(() => {
-            const latest = localStorage.getItem('dori_live_sync_data');
-            if (latest) {
-                const parsed = JSON.parse(latest);
-                if (JSON.stringify(parsed) !== JSON.stringify(appState)) {
-                    appState = parsed;
-                    renderUI();
-                }
-            }
-        }, 1500);
-
-        window.onload = initApp;
+        function updateCloudFinal() {
+            tournamentData.final1 = document.getElementById('final-team1').value;
+            tournamentData.final2 = document.getElementById('final-team2').value;
+            saveToCloud();
+        }
     </script>
 </body>
 </html>
