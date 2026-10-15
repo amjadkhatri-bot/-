@@ -16,16 +16,6 @@
         }
         .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #b45309); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .line-connector { position: relative; }
-        .line-connector::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #f59e0b, #3b82f6);
-            z-index: 1;
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 bracket-bg">
@@ -125,7 +115,7 @@
                         <span>المجموعة الأولى (أ)</span>
                         <span class="text-xs bg-sky-500/10 text-sky-300 px-3 py-1 rounded-full">8 فرق</span>
                     </h3>
-                    <div id="group-a-teams" class="grid grid-cols-2 gap-2 mb-6"></div>
+                    <div id="group-a-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6"></div>
                     <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">مواجهات المجموعة (أ)</h4>
                     <div id="group-a-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
                 </div>
@@ -136,7 +126,7 @@
                         <span>المجموعة الثانية (ب)</span>
                         <span class="text-xs bg-indigo-500/10 text-indigo-300 px-3 py-1 rounded-full">8 فرق</span>
                     </h3>
-                    <div id="group-b-teams" class="grid grid-cols-2 gap-2 mb-6"></div>
+                    <div id="group-b-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6"></div>
                     <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">مواجهات المجموعة (ب)</h4>
                     <div id="group-b-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
                 </div>
@@ -185,7 +175,7 @@
             <!-- WORLD CUP THEME VISUAL BRACKET -->
             <div class="glass-panel p-6 sm:p-10 rounded-3xl text-center relative overflow-hidden border border-slate-800">
                 <h2 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase mb-2">الطريق إلى النهـائي</h2>
-                <h3 class="text-xl font-bold gradient-gold mb-8">كـأس دوري قيـد الأرادي</h3>
+                <h3 class="text-xl font-bold gradient-gold mb-8">كـأس دوري قيـد الأرض</h3>
 
                 <!-- Symmetric Bracket Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
@@ -205,4 +195,159 @@
 
                     <!-- Center Trophy Section -->
                     <div class="flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
-                        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-b from-amber-400/20 via-amber-500/10 to-transparent p-2 border border-amber-500/30 flex items-center justify-center relative
+                        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-b from-amber-400/20 via-amber-500/10 to-transparent p-2 border border-amber-500/30 flex items-center justify-center relative">
+                            <span class="text-7xl sm:text-8xl filter drop-shadow-[0_0_20px_rgba(245,158,11,0.5)]">🏆</span>
+                        </div>
+                        <div class="bg-slate-950/90 border border-amber-500/40 p-4 rounded-2xl text-center w-full shadow-2xl">
+                            <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">المباراة النهائية</span>
+                            <div class="text-sm font-black text-white mt-1">WINNER'S TROPHY</div>
+                        </div>
+                    </div>
+
+                    <!-- Right Branch (Red Side / Group B) -->
+                    <div class="space-y-6">
+                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-1.5 rounded-full border border-red-500/20">المسار الأحمر (ب)</div>
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-red-500/50 shadow-lg text-center">
+                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 2 - الطرف الأول</span>
+                            <div id="wc-b1" class="text-lg font-black text-red-300">أول المجموعة (ب)</div>
+                        </div>
+                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-red-400/30 shadow-lg text-center">
+                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 1 - الطرف الثاني</span>
+                            <div id="wc-b2" class="text-lg font-black text-red-200">ثاني المجموعة (ب)</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer with AITECHOM Rights -->
+    <footer class="bg-slate-950/90 border-t border-slate-900 py-6 text-center text-xs text-slate-400 font-bold space-y-2">
+        <div>مدرسة الإمام سيف بن سلطان (11-12) &copy; دوري قيد الأرض 2026-2027</div>
+        <div class="text-amber-400/90 tracking-widest text-[11px] font-black">
+            ⚡ جميع الحقوق محفوظة وتطوير شركة <span class="text-white border-b border-amber-400 pb-0.5">AITECHOM</span>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Restored original team names format (11/1 to 11/8 and 12/1 to 12/8)
+        const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
+        const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
+
+        let groupAStore = [];
+        let groupBStore = [];
+
+        function initTeams() {
+            renderList('list-grade-11', teams11);
+            renderList('list-grade-12', teams12);
+            updateAttendance();
+        }
+
+        function renderList(containerId, teams) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = teams.map(t => `
+                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${t.status ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-500 hover:border-slate-700'}">
+                    <span class="font-bold text-sm">${t.name}</span>
+                    <span class="text-xs font-black px-2.5 py-1 rounded-xl ${t.status ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-500'}">${t.status ? 'حاضر ✓' : 'غائب ✗'}</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleTeam(id) {
+            const team = [...teams11, ...teams12].find(t => t.id === id);
+            if (team) {
+                team.status = !team.status;
+                initTeams();
+            }
+        }
+
+        function updateAttendance() {
+            const active = [...teams11, ...teams12].filter(t => t.status).length;
+            document.getElementById('attendance-count').innerText = `الحاضرون: ${active} / 16`;
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tab-checkin').classList.toggle('hidden', tab !== 'checkin');
+            document.getElementById('tab-groups').classList.toggle('hidden', tab !== 'groups');
+            document.getElementById('tab-bracket').classList.toggle('hidden', tab !== 'bracket');
+
+            const activeClass = "px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-lg";
+            const inactiveClass = "px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white";
+
+            document.getElementById('btn-checkin').className = tab === 'checkin' ? activeClass : inactiveClass;
+            document.getElementById('btn-groups').className = tab === 'groups' ? activeClass : inactiveClass;
+            document.getElementById('btn-bracket').className = tab === 'bracket' ? activeClass : inactiveClass;
+        }
+
+        function runDraw() {
+            const activeTeams = [...teams11, ...teams12].filter(t => t.status);
+            if (activeTeams.length < 2) {
+                alert('يرجى تأكيد حضور فريقين على الأقل لإجراء القرعة!');
+                return;
+            }
+
+            const shuffled = [...activeTeams].sort(() => Math.random() - 0.5);
+            const mid = Math.ceil(shuffled.length / 2);
+            groupAStore = shuffled.slice(0, mid);
+            groupBStore = shuffled.slice(mid);
+
+            renderGroup('group-a-teams', 'group-a-matches', groupAStore);
+            renderGroup('group-b-teams', 'group-b-matches', groupBStore);
+            populateQualifierDropdowns();
+
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            switchTab('groups');
+        }
+
+        function renderGroup(teamsContainerId, matchesContainerId, teams) {
+            document.getElementById(teamsContainerId).innerHTML = teams.map(t => `
+                <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center font-black text-xs sm:text-sm text-slate-200">${t.name}</div>
+            `).join('');
+
+            const matches = [];
+            for (let i = 0; i < teams.length; i++) {
+                for (let j = i + 1; j < teams.length; j++) {
+                    matches.push({ team1: teams[i].name, team2: teams[j].name });
+                }
+            }
+
+            document.getElementById(matchesContainerId).innerHTML = matches.map((m, idx) => `
+                <div class="bg-slate-950/50 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center px-3">
+                    <span class="text-[10px] text-slate-500 font-bold">مباراة ${idx + 1}</span>
+                    <span class="font-black text-slate-200">${m.team1} <span class="text-amber-400 mx-1">VS</span> ${m.team2}</span>
+                </div>
+            `).join('');
+        }
+
+        function populateQualifierDropdowns() {
+            const fillOptions = (elemId, teams) => {
+                const elem = document.getElementById(elemId);
+                elem.innerHTML = '<option value="">-- اختر الفريق --</option>' + 
+                    teams.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+            };
+
+            fillOptions('qualifier-a1', groupAStore);
+            fillOptions('qualifier-a2', groupAStore);
+            fillOptions('qualifier-b1', groupBStore);
+            fillOptions('qualifier-b2', groupBStore);
+        }
+
+        function updateWorldCupBracket() {
+            const a1 = document.getElementById('qualifier-a1').value || 'أول المجموعة (أ)';
+            const a2 = document.getElementById('qualifier-a2').value || 'ثاني المجموعة (أ)';
+            const b1 = document.getElementById('qualifier-b1').value || 'أول المجموعة (ب)';
+            const b2 = document.getElementById('qualifier-b2').value || 'ثاني المجموعة (ب)';
+
+            document.getElementById('wc-a1').innerText = a1;
+            document.getElementById('wc-a2').innerText = a2;
+            document.getElementById('wc-b1').innerText = b1;
+            document.getElementById('wc-b2').innerText = b2;
+        }
+
+        window.onload = initTeams;
+    </script>
+</body>
+</html>
