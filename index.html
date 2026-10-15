@@ -5,134 +5,213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دوري قيد الأرض لكرة القدم 2026-2027 | مدرسة الإمام سيف بن سلطان (11-12)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .gradient-gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body { font-family: 'Cairo', sans-serif; background: #070a13; color: #f8fafc; }
+        .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .glass-gold { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.05)); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .gradient-gold-text { background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-cyan-text { background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.25); }
+        .glow-cyan { box-shadow: 0 0 25px rgba(56, 189, 248, 0.2); }
+        .glow-active { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
 
-    <!-- Header -->
-    <header class="bg-slate-900/80 border-b border-slate-800 py-4 px-6 sticky top-0 z-50 backdrop-blur-md">
+    <!-- Header Section -->
+    <header class="bg-slate-950/90 border-b border-amber-500/20 py-4 px-4 sm:px-8 sticky top-0 z-50 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <span class="text-3xl">⚽</span>
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center shadow-lg shadow-amber-500/30 text-slate-950 text-2xl font-black">
+                    🏆
+                </div>
                 <div>
-                    <h1 class="text-xl font-black gradient-gold">دوري قيد الأرض لكرة القدم 2026-2027</h1>
-                    <p class="text-xs text-slate-400">مدرسة الإمام سيف بن سلطان (11-12)</p>
+                    <h1 class="text-xl sm:text-2xl font-black gradient-gold-text tracking-wide">دوري قيد الأرض لكرة القدم 2026-2027</h1>
+                    <p class="text-xs text-slate-400 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-school text-amber-400"></i> مدرسة الإمام سيف بن سلطان (11-12)
+                    </p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="switchTab('checkin')" id="btn-checkin" class="px-4 py-2 rounded-xl text-sm font-bold bg-sky-500 text-white shadow-lg transition-all">1. الحضور والتأكيد</button>
-                <button onclick="switchTab('groups')" id="btn-groups" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-800 text-slate-400 transition-all">2. المجموعات والجدول</button>
-                <button onclick="switchTab('knockout')" id="btn-knockout" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-800 text-slate-400 transition-all">3. الأدوار الإقصائية 🏆</button>
+
+            <!-- Navigation Tabs -->
+            <div class="flex bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 gap-1">
+                <button onclick="switchTab('checkin')" id="btn-checkin" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-lg">
+                    1. الحضور والقرعة
+                </button>
+                <button onclick="switchTab('groups')" id="btn-groups" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
+                    2. المجموعات
+                </button>
+                <button onclick="switchTab('knockout')" id="btn-knockout" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
+                    3. الأدوار الإقصائية ⚔️
+                </button>
             </div>
         </div>
     </header>
 
     <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6 w-full flex-grow">
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
 
-        <!-- Tab 1: Check-in & Draw Setup -->
+        <!-- TAB 1: ATTENDANCE (All Absent by default) -->
         <section id="tab-checkin" class="space-y-6">
-            <div class="glass-card p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="glass-card p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <h2 class="text-2xl font-bold text-white mb-1">تسجيل حضور الصفوف المشاركة</h2>
-                    <p class="text-slate-400 text-sm">تأكيد حضور الـ 16 صفاً (الحادي عشر والثاني عشر) قبل إجراء القرعة</p>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تأكيد الحضور الرسمي</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
+                    <p class="text-slate-400 text-sm mt-1">اضغط على الصف لتأكيد حضوره رسمياً (جميع الفرق غائبة تلقائياً حتى يتم تأكيدها)</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span id="attendance-count" class="text-sm font-bold bg-slate-800 px-4 py-2 rounded-xl border border-slate-700">الحاضرون: 16 / 16</span>
-                    <button onclick="runDraw()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black px-6 py-3 rounded-xl shadow-xl transition-all transform hover:scale-105 active:scale-95">🎲 إجـراء القـرعـة الآليـة</button>
+                <div class="flex flex-wrap items-center gap-4">
+                    <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
+                        الحاضرون: 0 / 16
+                    </div>
+                    <button onclick="runDraw()" class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:shadow-amber-500/30 transition-all transform hover:-translate-y-1 active:translate-y-0 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-dice text-lg"></i> إجـراء القـرعـة المباشرة
+                    </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- 11th Grade -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-sky-400 border-b border-slate-700 pb-3 mb-4 flex justify-between items-center">
-                        <span>صفوف الحادي عشر (11)</span>
-                        <span class="text-xs bg-sky-950 text-sky-300 px-2 py-1 rounded">8 فرق</span>
-                    </h3>
+                <div class="glass-card p-6 rounded-3xl">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                        <h3 class="text-lg font-black text-sky-400 flex items-center gap-2">
+                            <i class="fa-solid fa-users"></i> صفوف الحادي عشر (11)
+                        </h3>
+                        <span class="text-xs font-bold bg-sky-500/10 text-sky-400 px-3 py-1 rounded-full border border-sky-500/20">8 صفوف</span>
+                    </div>
                     <div id="list-grade-11" class="grid grid-cols-2 gap-3"></div>
                 </div>
 
                 <!-- 12th Grade -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-indigo-400 border-b border-slate-700 pb-3 mb-4 flex justify-between items-center">
-                        <span>صفوف الثاني عشر (12)</span>
-                        <span class="text-xs bg-indigo-950 text-indigo-300 px-2 py-1 rounded">8 فرق</span>
-                    </h3>
+                <div class="glass-card p-6 rounded-3xl">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                        <h3 class="text-lg font-black text-indigo-400 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap"></i> صفوف الثاني عشر (12)
+                        </h3>
+                        <span class="text-xs font-bold bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full border border-indigo-500/20">8 صفوف</span>
+                    </div>
                     <div id="list-grade-12" class="grid grid-cols-2 gap-3"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Tab 2: Groups & Matches -->
+        <!-- TAB 2: GROUPS & MATCHES -->
         <section id="tab-groups" class="hidden space-y-6">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold gradient-text">جدول المجموعات دوري قيد الأرض</h2>
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-sm font-bold border border-slate-700">🖨️ طباعة الجدول</button>
+            <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-black gradient-cyan-text">جدول المجموعات والمواجهات</h2>
+                    <p class="text-xs text-slate-400">تقسيم الفرق وتأهيل أبطال المجموعات</p>
+                </div>
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> طباعة الجدول
+                </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Group A -->
-                <div class="glass-card p-6 rounded-2xl border-t-4 border-sky-500">
-                    <h3 class="text-xl font-bold text-sky-400 mb-4 flex justify-between items-center">
+                <div class="glass-card p-6 rounded-3xl border-t-4 border-t-sky-500 glow-cyan">
+                    <h3 class="text-xl font-black text-sky-400 mb-4 flex justify-between items-center">
                         <span>المجموعة الأولى (أ)</span>
-                        <span class="text-xs font-normal text-slate-400">8 فرق</span>
+                        <span class="text-xs bg-sky-500/10 text-sky-300 px-3 py-1 rounded-full">8 فرق</span>
                     </h3>
                     <div id="group-a-teams" class="grid grid-cols-2 gap-2 mb-6"></div>
-                    <h4 class="font-bold text-slate-300 border-b border-slate-700 pb-2 mb-3 text-sm">مواجهات المجموعة الأولى</h4>
-                    <div id="group-a-matches" class="space-y-2 max-h-80 overflow-y-auto pr-1 text-sm"></div>
+                    <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">مواجهات المجموعة (أ)</h4>
+                    <div id="group-a-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
                 </div>
 
                 <!-- Group B -->
-                <div class="glass-card p-6 rounded-2xl border-t-4 border-indigo-500">
-                    <h3 class="text-xl font-bold text-indigo-400 mb-4 flex justify-between items-center">
+                <div class="glass-card p-6 rounded-3xl border-t-4 border-t-indigo-500">
+                    <h3 class="text-xl font-black text-indigo-400 mb-4 flex justify-between items-center">
                         <span>المجموعة الثانية (ب)</span>
-                        <span class="text-xs font-normal text-slate-400">8 فرق</span>
+                        <span class="text-xs bg-indigo-500/10 text-indigo-300 px-3 py-1 rounded-full">8 فرق</span>
                     </h3>
                     <div id="group-b-teams" class="grid grid-cols-2 gap-2 mb-6"></div>
-                    <h4 class="font-bold text-slate-300 border-b border-slate-700 pb-2 mb-3 text-sm">مواجهات المجموعة الثانية</h4>
-                    <div id="group-b-matches" class="space-y-2 max-h-80 overflow-y-auto pr-1 text-sm"></div>
+                    <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">مواجهات المجموعة (ب)</h4>
+                    <div id="group-b-matches" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Tab 3: Knockout Stage -->
-        <section id="tab-knockout" class="hidden space-y-6">
-            <div class="text-center space-y-2 mb-8">
-                <h2 class="text-3xl font-black gradient-gold">الأدوار الإقصائية (خروج المغلوب)</h2>
-                <p class="text-slate-400 text-sm">متأهلو المتصدر والوصيف من المجموعة الأولى والثانية</p>
+        <!-- TAB 3: KNOCKOUT & QUALIFIED SELECTION -->
+        <section id="tab-knockout" class="hidden space-y-8">
+            <!-- Qualifier Selection Bar -->
+            <div class="glass-card p-6 rounded-3xl border border-amber-500/30 glow-gold">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-black gradient-gold-text flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-400"></i> تحديد المتأهلين للأدوار الإقصائية
+                    </h2>
+                    <p class="text-xs text-slate-400">اختر الصفوف المتأهلة من دور المجموعات لتوليد مواجهات نصف النهائي تلقائياً</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-sky-400 mb-1">أول المجموعة (أ)</label>
+                        <select id="qualifier-a1" onchange="updateKnockoutBrackets()" class="w-full bg-slate-900 text-white font-bold text-sm p-3 rounded-xl border border-slate-700 focus:border-amber-400 outline-none">
+                            <option value="">-- اختر الفريق --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-sky-300 mb-1">ثاني المجموعة (أ)</label>
+                        <select id="qualifier-a2" onchange="updateKnockoutBrackets()" class="w-full bg-slate-900 text-white font-bold text-sm p-3 rounded-xl border border-slate-700 focus:border-amber-400 outline-none">
+                            <option value="">-- اختر الفريق --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-400 mb-1">أول المجموعة (ب)</label>
+                        <select id="qualifier-b1" onchange="updateKnockoutBrackets()" class="w-full bg-slate-900 text-white font-bold text-sm p-3 rounded-xl border border-slate-700 focus:border-amber-400 outline-none">
+                            <option value="">-- اختر الفريق --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-300 mb-1">ثاني المجموعة (ب)</label>
+                        <select id="qualifier-b2" onchange="updateKnockoutBrackets()" class="w-full bg-slate-900 text-white font-bold text-sm p-3 rounded-xl border border-slate-700 focus:border-amber-400 outline-none">
+                            <option value="">-- اختر الفريق --</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="max-w-4xl mx-auto space-y-8">
+            <!-- Semi Finals & Final Matches Bracket -->
+            <div class="max-w-4xl mx-auto space-y-6">
+                <h3 class="text-xl font-black text-center text-slate-300 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-fire text-amber-500"></i> شجرة المواجهات الإقصائية
+                </h3>
+
                 <!-- Semi Finals -->
-                <div class="glass-card p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-amber-400 border-b border-slate-700 pb-3 mb-4 text-center">🔥 الدور النصف نهائي</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-center">
-                            <span class="text-xs text-slate-500 block mb-1">المباراة الأولى</span>
-                            <div class="font-bold text-slate-200">أول المجموعة (أ) <span class="text-amber-500 mx-2">VS</span> ثاني المجموعة (ب)</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-5 rounded-2xl border-t-2 border-amber-400 text-center">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-2">النصف نهائي (1)</span>
+                        <div class="text-base font-black text-white bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                            <span id="sf1-team1" class="text-sky-400">أول المجموعة (أ)</span>
+                            <span class="text-amber-500 mx-3 font-black">VS</span>
+                            <span id="sf1-team2" class="text-indigo-400">ثاني المجموعة (ب)</span>
                         </div>
-                        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-center">
-                            <span class="text-xs text-slate-500 block mb-1">المباراة الثانية</span>
-                            <div class="font-bold text-slate-200">أول المجموعة (ب) <span class="text-amber-500 mx-2">VS</span> ثاني المجموعة (أ)</div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl border-t-2 border-amber-400 text-center">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block mb-2">النصف نهائي (2)</span>
+                        <div class="text-base font-black text-white bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                            <span id="sf2-team1" class="text-indigo-400">أول المجموعة (ب)</span>
+                            <span class="text-amber-500 mx-3 font-black">VS</span>
+                            <span id="sf2-team2" class="text-sky-400">ثاني المجموعة (أ)</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Final -->
-                <div class="glass-card p-6 rounded-2xl border-2 border-amber-500/30 bg-gradient-to-b from-amber-500/5 to-transparent text-center">
-                    <span class="text-4xl block mb-2">🏆</span>
-                    <h3 class="text-2xl font-black gradient-gold mb-4">المباراة النهائية</h3>
-                    <div class="bg-slate-900/80 p-6 rounded-xl border border-amber-500/20 max-w-md mx-auto">
-                        <div class="text-lg font-bold text-white">الفائز من نصف النهائي (1) <span class="text-amber-400 mx-2">VS</span> الفائز من نصف النهائي (2)</div>
-                        <span class="text-xs text-amber-500/80 mt-2 block">تحديد بطل دوري قيد الأرض 2026-2027</span>
+                <!-- Grand Final -->
+                <div class="glass-gold p-8 rounded-3xl text-center glow-gold relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
+                    <span class="text-5xl block mb-2 animate-bounce">🏆</span>
+                    <h3 class="text-3xl font-black gradient-gold-text mb-4">المباراة النهائية الكبرى</h3>
+                    <div class="bg-slate-950/90 p-6 rounded-2xl border border-amber-500/30 max-w-lg mx-auto shadow-2xl">
+                        <div class="text-lg font-black text-white">
+                            <span>الفائز من نصف النهائي (1)</span>
+                            <span class="text-amber-400 mx-3">VS</span>
+                            <span>الفائز من نصف النهائي (2)</span>
+                        </div>
+                        <span class="text-xs text-amber-400/80 font-bold mt-2 block">تتويج بطل دوري قيد الأرض 2026-2027</span>
                     </div>
                 </div>
             </div>
@@ -141,13 +220,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900/60 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        مدرسة الإمام سيف بن سلطان (11-12) &copy; جميع الحقوق محفوظة لدوري قيد الأرض 2026-2027
+    <footer class="bg-slate-950 border-t border-slate-900 py-4 text-center text-xs text-slate-500 font-bold">
+        مدرسة الإمام سيف بن سلطان (11-12) &copy; جميع الحقوق محفوظة - دوري قيد الأرض 2026-2027
     </footer>
 
+    <!-- Logic Script -->
     <script>
-        const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: true }));
-        const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: true }));
+        // ALL TEAMS SET TO ABSENT (status: false) BY DEFAULT
+        const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `صف 11 / ${i+1}`, status: false }));
+        const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `صف 12 / ${i+1}`, status: false }));
+
+        let groupAStore = [];
+        let groupBStore = [];
 
         function initTeams() {
             renderList('list-grade-11', teams11);
@@ -158,9 +242,9 @@
         function renderList(containerId, teams) {
             const container = document.getElementById(containerId);
             container.innerHTML = teams.map(t => `
-                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-xl border flex justify-between items-center transition-all ${t.status ? 'bg-slate-800/80 border-slate-700 text-slate-200' : 'bg-rose-950/20 border-rose-900/40 text-slate-500 line-through'}">
+                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${t.status ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300 glow-active' : 'bg-slate-900/60 border-slate-800 text-slate-500 hover:border-slate-700'}">
                     <span class="font-bold text-sm">${t.name}</span>
-                    <span class="text-xs px-2 py-0.5 rounded ${t.status ? 'bg-emerald-950 text-emerald-400' : 'bg-rose-950 text-rose-400'}">${t.status ? 'حاضر ✓' : 'غائب ✗'}</span>
+                    <span class="text-xs font-black px-2.5 py-1 rounded-xl ${t.status ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-500'}">${t.status ? 'حاضر ✓' : 'غائب ✗'}</span>
                 </div>
             `).join('');
         }
@@ -183,33 +267,37 @@
             document.getElementById('tab-groups').classList.toggle('hidden', tab !== 'groups');
             document.getElementById('tab-knockout').classList.toggle('hidden', tab !== 'knockout');
 
-            document.getElementById('btn-checkin').className = tab === 'checkin' ? 'px-4 py-2 rounded-xl text-sm font-bold bg-sky-500 text-white shadow-lg' : 'px-4 py-2 rounded-xl text-sm font-bold bg-slate-800 text-slate-400';
-            document.getElementById('btn-groups').className = tab === 'groups' ? 'px-4 py-2 rounded-xl text-sm font-bold bg-sky-500 text-white shadow-lg' : 'px-4 py-2 rounded-xl text-sm font-bold bg-slate-800 text-slate-400';
-            document.getElementById('btn-knockout').className = tab === 'knockout' ? 'px-4 py-2 rounded-xl text-sm font-bold bg-sky-500 text-white shadow-lg' : 'px-4 py-2 rounded-xl text-sm font-bold bg-slate-800 text-slate-400';
+            const btnClassActive = "px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-lg";
+            const btnClassInactive = "px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white";
+
+            document.getElementById('btn-checkin').className = tab === 'checkin' ? btnClassActive : btnClassInactive;
+            document.getElementById('btn-groups').className = tab === 'groups' ? btnClassActive : btnClassInactive;
+            document.getElementById('btn-knockout').className = tab === 'knockout' ? btnClassActive : btnClassInactive;
         }
 
         function runDraw() {
             const activeTeams = [...teams11, ...teams12].filter(t => t.status);
             if (activeTeams.length < 2) {
-                alert('يجب حضور فريقين على الأقل لإجراء القرعة!');
+                alert('يرجى تأكيد حضور فريقين على الأقل لإجراء القرعة!');
                 return;
             }
 
             const shuffled = [...activeTeams].sort(() => Math.random() - 0.5);
             const mid = Math.ceil(shuffled.length / 2);
-            const groupA = shuffled.slice(0, mid);
-            const groupB = shuffled.slice(mid);
+            groupAStore = shuffled.slice(0, mid);
+            groupBStore = shuffled.slice(mid);
 
-            renderGroup('group-a-teams', 'group-a-matches', groupA);
-            renderGroup('group-b-teams', 'group-b-matches', groupB);
+            renderGroup('group-a-teams', 'group-a-matches', groupAStore);
+            renderGroup('group-b-teams', 'group-b-matches', groupBStore);
+            populateQualifierDropdowns();
 
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
             switchTab('groups');
         }
 
         function renderGroup(teamsContainerId, matchesContainerId, teams) {
             document.getElementById(teamsContainerId).innerHTML = teams.map(t => `
-                <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 text-center font-bold text-sm text-slate-300">${t.name}</div>
+                <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-center font-black text-xs sm:text-sm text-slate-200">${t.name}</div>
             `).join('');
 
             const matches = [];
@@ -220,11 +308,37 @@
             }
 
             document.getElementById(matchesContainerId).innerHTML = matches.map((m, idx) => `
-                <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-800/80 flex justify-between items-center px-3">
-                    <span class="text-xs text-slate-500">مباراة ${idx + 1}</span>
-                    <span class="font-bold text-slate-300">${m.team1} <span class="text-sky-500 mx-2">VS</span> ${m.team2}</span>
+                <div class="bg-slate-950/50 p-2.5 rounded-xl border border-slate-800 flex justify-between items-center px-3">
+                    <span class="text-[10px] text-slate-500 font-bold">مباراة ${idx + 1}</span>
+                    <span class="font-black text-slate-200">${m.team1} <span class="text-amber-400 mx-1">VS</span> ${m.team2}</span>
                 </div>
             `).join('');
+        }
+
+        function populateQualifierDropdowns() {
+            const fillOptions = (elemId, teams) => {
+                const elem = document.getElementById(elemId);
+                elem.innerHTML = '<option value="">-- اختر الفريق --</option>' + 
+                    teams.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+            };
+
+            fillOptions('qualifier-a1', groupAStore);
+            fillOptions('qualifier-a2', groupAStore);
+            fillOptions('qualifier-b1', groupBStore);
+            fillOptions('qualifier-b2', groupBStore);
+        }
+
+        function updateKnockoutBrackets() {
+            const a1 = document.getElementById('qualifier-a1').value || 'أول المجموعة (أ)';
+            const a2 = document.getElementById('qualifier-a2').value || 'ثاني المجموعة (أ)';
+            const b1 = document.getElementById('qualifier-b1').value || 'أول المجموعة (ب)';
+            const b2 = document.getElementById('qualifier-b2').value || 'ثاني المجموعة (ب)';
+
+            document.getElementById('sf1-team1').innerText = a1;
+            document.getElementById('sf1-team2').innerText = b2;
+
+            document.getElementById('sf2-team1').innerText = b1;
+            document.getElementById('sf2-team2').innerText = a2;
         }
 
         window.onload = initTeams;
