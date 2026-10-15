@@ -17,18 +17,27 @@
         .glass-panel { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
         .gradient-gold { background: linear-gradient(135deg, #fef08a, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .trophy-container {
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.1) 50%, transparent 80%);
-            box-shadow: 0 0 70px rgba(245, 158, 11, 0.35), inset 0 0 30px rgba(254, 240, 138, 0.2);
-            border: 2px solid rgba(245, 158, 11, 0.5);
+        /* 3D Realistic Trophy Styles */
+        .trophy-3d-wrapper {
+            perspective: 1000px;
         }
-        .realistic-trophy {
-            filter: drop-shadow(0 15px 25px rgba(245, 158, 11, 0.6)) drop-shadow(0 0 10px rgba(254, 240, 138, 0.8));
-            animation: floatTrophy 4s ease-in-out infinite;
+        .trophy-3d-card {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.15) 55%, transparent 85%);
+            box-shadow: 0 0 80px rgba(245, 158, 11, 0.4), inset 0 0 40px rgba(254, 240, 138, 0.25);
+            border: 2px solid rgba(245, 158, 11, 0.6);
+            transform: rotateX(10deg);
+            transition: transform 0.5s ease;
         }
-        @keyframes floatTrophy {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-8px) scale(1.03); }
+        .trophy-3d-card:hover {
+            transform: rotateX(0deg) scale(1.05);
+        }
+        .realistic-trophy-icon {
+            filter: drop-shadow(0 20px 30px rgba(245, 158, 11, 0.7)) drop-shadow(0 0 15px rgba(254, 240, 138, 0.9));
+            animation: floatTrophy3D 3.5s ease-in-out infinite;
+        }
+        @keyframes floatTrophy3D {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
     </style>
 </head>
@@ -52,10 +61,13 @@
             <!-- Navigation Tabs -->
             <div class="flex bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 gap-1">
                 <button onclick="switchTab('checkin')" id="btn-checkin" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-lg">
-                    1. شجرة المونديال والحضور 🏆
+                    1. تأكيد الحضور 🏆
                 </button>
                 <button onclick="switchTab('groups')" id="btn-groups" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
-                    2. جدول المجموعات (4 مباريات)
+                    2. جدول المجموعات والقرعة
+                </button>
+                <button onclick="switchTab('final')" id="btn-final" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
+                    3. المباراة النهائية ⭐
                 </button>
             </div>
         </div>
@@ -64,106 +76,130 @@
     <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-grow">
 
-        <!-- TAB 1: WORLD CUP TREE CHECK-IN -->
+        <!-- TAB 1: ATTENDANCE & 3D TROPHY -->
         <section id="tab-checkin" class="space-y-8">
             <div class="glass-panel p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-r-amber-500">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">نظام المونديال الرسمي</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">شجرة تأكيد حضور الفرق (16 فريقاً)</h2>
-                    <p class="text-slate-400 text-sm mt-1">اضغط على أي فريق لتأكيد حضوره (جميع الفرق غائبة تلقائياً حتى تأكيدها)</p>
+                    <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">تأكيد الحضور الرسمي (11 ضد 12)</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">تسجيل حضور الفصول المشاركة</h2>
+                    <p class="text-slate-400 text-sm mt-1">اضغط على الصف لتأكيد حضوره (جميع الفرق غائبة تلقائياً حتى يتم الضغط عليها)</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-4">
                     <div id="attendance-count" class="text-sm font-black bg-slate-900 px-5 py-3 rounded-2xl border border-slate-800 text-amber-400 shadow-inner">
                         الحاضرون: 0 / 16
                     </div>
                     <button onclick="runDraw()" class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-black px-8 py-3.5 rounded-2xl shadow-xl hover:shadow-amber-500/30 transition-all transform hover:-translate-y-1 active:translate-y-0 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-dice text-lg"></i> إجراء القرعة وبدء البطولة
+                        <i class="fa-solid fa-dice text-lg"></i> سحب القرعة العشوائية
                     </button>
                 </div>
             </div>
 
-            <!-- WORLD CUP TREE LAYOUT FOR TEAMS CHECK-IN -->
+            <!-- WORLD CUP TREE WITH 3D TROPHY -->
             <div class="glass-panel p-6 sm:p-10 rounded-3xl relative overflow-hidden border border-slate-800">
                 <div class="text-center mb-8">
-                    <h3 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase">الطريق إلى نهائي المونديال</h3>
-                    <p class="text-xs text-amber-400 font-bold mt-1">المسار الأيمن والمسار الأيسر يحيطان بكأس البطولة الذهبي الفاخر</p>
+                    <h3 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase">شجرة المونديال الرسمية</h3>
+                    <p class="text-xs text-amber-400 font-bold mt-1">صفوف الحادي عشر (11) ضد صفوف الثاني عشر (12)</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-7xl mx-auto">
                     
-                    <!-- Left Side (Teams 1 to 8) -->
+                    <!-- Left Side: Grade 11 -->
                     <div class="space-y-3">
-                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-2 text-center rounded-full border border-blue-500/20 mb-4">المسار الأيسر (الفرق 1 - 8)</div>
-                        <div id="tree-left-side" class="space-y-2.5"></div>
+                        <div class="text-xs font-black text-sky-400 uppercase tracking-widest bg-sky-500/10 py-2.5 text-center rounded-full border border-sky-500/20 mb-4 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-users"></i> صفوف الحادي عشر (11/1 - 11/8)
+                        </div>
+                        <div id="tree-grade-11" class="space-y-2.5"></div>
                     </div>
 
-                    <!-- Center Trophy -->
-                    <div class="flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
-                        <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full trophy-container p-4 flex items-center justify-center relative">
-                            <span class="text-8xl sm:text-9xl realistic-trophy select-none">🏆</span>
+                    <!-- Center 3D Realistic Trophy -->
+                    <div class="trophy-3d-wrapper flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
+                        <div class="w-52 h-52 sm:w-64 sm:h-64 rounded-full trophy-3d-card p-4 flex items-center justify-center relative">
+                            <span class="text-8xl sm:text-9xl realistic-trophy-icon select-none">🏆</span>
                         </div>
                         <div class="bg-slate-950/95 border border-amber-500/50 p-4 rounded-2xl text-center w-full shadow-2xl">
-                            <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">الكأس الذهبي الرسمي</span>
-                            <div class="text-sm font-black text-white mt-1">WORLD CUP TROPHY 2026</div>
+                            <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">الكأس الذهبي ثلاثي الأبعاد</span>
+                            <div class="text-sm font-black text-white mt-1">3D CHAMPIONS TROPHY</div>
                         </div>
                     </div>
 
-                    <!-- Right Side (Teams 9 to 16) -->
+                    <!-- Right Side: Grade 12 -->
                     <div class="space-y-3">
-                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-2 text-center rounded-full border border-red-500/20 mb-4">المسار الأيمن (الفرق 9 - 16)</div>
-                        <div id="tree-right-side" class="space-y-2.5"></div>
+                        <div class="text-xs font-black text-indigo-400 uppercase tracking-widest bg-indigo-500/10 py-2.5 text-center rounded-full border border-indigo-500/20 mb-4 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-graduation-cap"></i> صفوف الثاني عشر (12/1 - 12/8)
+                        </div>
+                        <div id="tree-grade-12" class="space-y-2.5"></div>
                     </div>
 
                 </div>
             </div>
         </section>
 
-        <!-- TAB 2: GROUPS & EXACTLY 4 MATCHES -->
+        <!-- TAB 2: GROUPS & MATCHES TABLE -->
         <section id="tab-groups" class="hidden space-y-8">
             <div class="flex justify-between items-center bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
                 <div>
-                    <h2 class="text-2xl font-black text-amber-400">جدول المجموعات (4 مباريات فقط لكل مجموعة)</h2>
-                    <p class="text-xs text-slate-400">تقسيم المجموعتين والجدول المباشر للمواجهات</p>
+                    <h2 class="text-2xl font-black text-amber-400">جدول المواجهات (11 ضد 12)</h2>
+                    <p class="text-xs text-slate-400">جدول قرعة المجموعتين مع إمكانية إدخال الأهداف والنتائج</p>
                 </div>
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
-                    <i class="fa-solid fa-print"></i> طباعة
-                </button>
-            </div>
-
-            <!-- Groups Banner -->
-            <div class="glass-panel p-6 rounded-3xl text-center relative overflow-hidden border border-amber-500/30">
-                <h3 class="text-2xl font-black text-white tracking-widest uppercase mb-1">قرعة المجموعات الرسمية</h3>
-                <div class="flex justify-center items-center my-4">
-                    <span class="text-6xl realistic-trophy select-none">🏆</span>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                    <div>
-                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-2 rounded-full border border-blue-500/20 mb-3">المجموعة الأولى (أ) - 8 فرق</div>
-                        <div id="group-a-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
-                    </div>
-                    <div>
-                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-2 rounded-full border border-red-500/20 mb-3">المجموعة الثانية (ب) - 8 فرق</div>
-                        <div id="group-b-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
-                    </div>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> طباعة الجدول
+                    </button>
+                    <button onclick="switchTab('final')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-lg flex items-center gap-2">
+                        الانتقال إلى النهائي 🏆
+                    </button>
                 </div>
             </div>
 
-            <!-- Exactly 4 Matches Tables -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-blue-500">
-                    <h3 class="text-lg font-black text-blue-400 mb-3 flex justify-between items-center">
-                        <span>مباريات المجموعة الأولى (أ)</span>
-                        <span class="text-xs bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full">4 مباريات</span>
+                <!-- Group A -->
+                <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-sky-500">
+                    <h3 class="text-lg font-black text-sky-400 mb-4 flex justify-between items-center">
+                        <span>المجموعة الأولى (أ)</span>
+                        <span class="text-xs bg-sky-500/10 text-sky-300 px-3 py-1 rounded-full">4 مواجهات</span>
                     </h3>
-                    <div id="group-a-matches" class="space-y-3.5 text-xs"></div>
+                    <div id="group-a-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6"></div>
+                    <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">جدول مباريات المجموعة (أ)</h4>
+                    <div id="group-a-matches" class="space-y-3"></div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-red-500">
-                    <h3 class="text-lg font-black text-red-400 mb-3 flex justify-between items-center">
-                        <span>مباريات المجموعة الثانية (ب)</span>
-                        <span class="text-xs bg-red-500/10 text-red-300 px-3 py-1 rounded-full">4 مباريات</span>
+                <!-- Group B -->
+                <div class="glass-panel p-6 rounded-3xl border-t-4 border-t-indigo-500">
+                    <h3 class="text-lg font-black text-indigo-400 mb-4 flex justify-between items-center">
+                        <span>المجموعة الثانية (ب)</span>
+                        <span class="text-xs bg-indigo-500/10 text-indigo-300 px-3 py-1 rounded-full">4 مواجهات</span>
                     </h3>
-                    <div id="group-b-matches" class="space-y-3.5 text-xs"></div>
+                    <div id="group-b-teams" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6"></div>
+                    <h4 class="font-bold text-slate-300 border-b border-slate-800 pb-2 mb-3 text-sm">جدول مباريات المجموعة (ب)</h4>
+                    <div id="group-b-matches" class="space-y-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: GRAND FINAL -->
+        <section id="tab-final" class="hidden space-y-8">
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl text-center relative overflow-hidden border border-amber-500/40">
+                <span class="text-xs font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 inline-block mb-4">المواجهة المباشرة الأخيرة</span>
+                <h2 class="text-3xl sm:text-5xl font-black gradient-gold tracking-tight mb-2">المباراة النهائية الكبرى</h2>
+                <p class="text-slate-400 text-sm mb-8">اختر طرفي النهائي لتتويج بطل دوري قيد الأرض 2026-2027</p>
+
+                <div class="max-w-2xl mx-auto bg-slate-950/90 p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-sky-400 mb-2">بطل المجموعة الأولى (أ)</label>
+                            <input type="text" id="final-team1" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-indigo-400 mb-2">بطل المجموعة الثانية (ب)</label>
+                            <input type="text" id="final-team2" placeholder="اسم الصف المتأهل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-center font-bold text-sm focus:border-amber-400 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800">
+                        <button onclick="confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } })" class="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-slate-950 font-black px-10 py-4 rounded-2xl shadow-2xl hover:shadow-amber-500/40 transition-all text-base w-full sm:w-auto">
+                            🎉 إعلان وتتويج بطل الدوري
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -180,49 +216,21 @@
 
     <!-- Logic Script -->
     <script>
-        const allTeams = [
-            { id: 't1', name: '11 / 1', status: false },
-            { id: 't2', name: '11 / 2', status: false },
-            { id: 't3', name: '11 / 3', status: false },
-            { id: 't4', name: '11 / 4', status: false },
-            { id: 't5', name: '11 / 5', status: false },
-            { id: 't6', name: '11 / 6', status: false },
-            { id: 't7', name: '11 / 7', status: false },
-            { id: 't8', name: '11 / 8', status: false },
-            { id: 't9', name: '12 / 1', status: false },
-            { id: 't10', name: '12 / 2', status: false },
-            { id: 't11', name: '12 / 3', status: false },
-            { id: 't12', name: '12 / 4', status: false },
-            { id: 't13', name: '12 / 5', status: false },
-            { id: 't14', name: '12 / 6', status: false },
-            { id: 't15', name: '12 / 7', status: false },
-            { id: 't16', name: '12 / 8', status: false }
-        ];
-
-        let groupAStore = [];
-        let groupBStore = [];
+        const teams11 = Array.from({length: 8}, (_, i) => ({ id: `11-${i+1}`, name: `11 / ${i+1}`, status: false }));
+        const teams12 = Array.from({length: 8}, (_, i) => ({ id: `12-${i+1}`, name: `12 / ${i+1}`, status: false }));
 
         function initTeams() {
-            renderWorldCupTree();
+            renderTree('tree-grade-11', teams11, 'sky');
+            renderTree('tree-grade-12', teams12, 'indigo');
             updateAttendance();
         }
 
-        function renderWorldCupTree() {
-            const leftContainer = document.getElementById('tree-left-side');
-            const rightContainer = document.getElementById('tree-right-side');
-
-            leftContainer.innerHTML = allTeams.slice(0, 8).map(t => createTeamTreeNode(t, 'blue')).join('');
-            rightContainer.innerHTML = allTeams.slice(8, 16).map(t => createTeamTreeNode(t, 'red')).join('');
-        }
-
-        function createTeamTreeNode(t, side) {
-            const borderColor = side === 'blue' ? 'border-blue-500/30' : 'border-red-500/30';
-            const activeBg = t.status 
-                ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.25)]' 
-                : 'bg-slate-900/80 ' + borderColor + ' text-slate-400 hover:border-slate-600';
-
-            return `
-                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${activeBg}">
+        function renderTree(containerId, teams, colorTheme) {
+            const container = document.getElementById(containerId);
+            const borderColor = colorTheme === 'sky' ? 'border-sky-500/30' : 'border-indigo-500/30';
+            
+            container.innerHTML = teams.map(t => `
+                <div onclick="toggleTeam('${t.id}')" class="cursor-pointer p-3 rounded-2xl border flex justify-between items-center transition-all ${t.status ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.25)]' : 'bg-slate-900/80 ' + borderColor + ' text-slate-400 hover:border-slate-600'}">
                     <div class="flex items-center gap-3">
                         <span class="w-6 h-6 rounded-lg bg-slate-950 flex items-center justify-center text-[10px] font-black text-amber-400 border border-slate-800">⚽</span>
                         <span class="font-black text-sm text-white">${t.name}</span>
@@ -231,11 +239,11 @@
                         ${t.status ? 'حاضر ✓' : 'غائب ✗'}
                     </span>
                 </div>
-            `;
+            `).join('');
         }
 
         function toggleTeam(id) {
-            const team = allTeams.find(t => t.id === id);
+            const team = [...teams11, ...teams12].find(t => t.id === id);
             if (team) {
                 team.status = !team.status;
                 initTeams();
@@ -243,71 +251,79 @@
         }
 
         function updateAttendance() {
-            const active = allTeams.filter(t => t.status).length;
+            const active = [...teams11, ...teams12].filter(t => t.status).length;
             document.getElementById('attendance-count').innerText = `الحاضرون: ${active} / 16`;
         }
 
         function switchTab(tab) {
             document.getElementById('tab-checkin').classList.toggle('hidden', tab !== 'checkin');
             document.getElementById('tab-groups').classList.toggle('hidden', tab !== 'groups');
+            document.getElementById('tab-final').classList.toggle('hidden', tab !== 'final');
 
             const activeClass = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all bg-amber-500 text-slate-950 shadow-lg";
             const inactiveClass = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white";
 
             document.getElementById('btn-checkin').className = tab === 'checkin' ? activeClass : inactiveClass;
             document.getElementById('btn-groups').className = tab === 'groups' ? activeClass : inactiveClass;
+            document.getElementById('btn-final').className = tab === 'final' ? activeClass : inactiveClass;
         }
 
         function runDraw() {
-            const activeTeams = allTeams.filter(t => t.status);
-            if (activeTeams.length < 2) {
-                alert('يرجى تأكيد حضور فريقين على الأقل في شجرة المونديال لإجراء القرعة!');
+            const active11 = teams11.filter(t => t.status);
+            const active12 = teams12.filter(t => t.status);
+
+            if (active11.length === 0 && active12.length === 0) {
+                alert('يرجى تأكيد حضور الفرق أولاً قبل سحب القرعة!');
                 return;
             }
 
-            const shuffled = [...activeTeams].sort(() => Math.random() - 0.5);
-            const mid = Math.ceil(shuffled.length / 2);
-            groupAStore = shuffled.slice(0, mid);
-            groupBStore = shuffled.slice(mid);
+            const shuffled11 = [...(active11.length ? active11 : teams11)].sort(() => Math.random() - 0.5);
+            const shuffled12 = [...(active12.length ? active12 : teams12)].sort(() => Math.random() - 0.5);
 
-            renderGroupWithExact4Matches('group-a-teams', 'group-a-matches', groupAStore, 'blue');
-            renderGroupWithExact4Matches('group-b-teams', 'group-b-matches', groupBStore, 'red');
+            const groupA = [];
+            const groupB = [];
+
+            for (let i = 0; i < 4; i++) {
+                if (shuffled11[i]) groupA.push(shuffled11[i]);
+                if (shuffled12[i]) groupA.push(shuffled12[i]);
+            }
+
+            for (let i = 4; i < 8; i++) {
+                if (shuffled11[i]) groupB.push(shuffled11[i]);
+                if (shuffled12[i]) groupB.push(shuffled12[i]);
+            }
+
+            renderGroup('group-a-teams', 'group-a-matches', groupA, 'sky');
+            renderGroup('group-b-teams', 'group-b-matches', groupB, 'indigo');
 
             confetti({ particleCount: 140, spread: 95, origin: { y: 0.6 } });
             switchTab('groups');
         }
 
-        function renderGroupWithExact4Matches(teamsContainerId, matchesContainerId, teams, colorTheme) {
-            const borderColor = colorTheme === 'blue' ? 'border-blue-500/40 text-blue-200' : 'border-red-500/40 text-red-200';
+        function renderGroup(teamsContainerId, matchesContainerId, teams, colorTheme) {
+            const borderColor = colorTheme === 'sky' ? 'border-sky-500/40 text-sky-200' : 'border-indigo-500/40 text-indigo-200';
             
             document.getElementById(teamsContainerId).innerHTML = teams.map(t => `
                 <div class="bg-slate-900/90 p-2.5 rounded-xl border ${borderColor} text-center font-black text-xs sm:text-sm shadow-md">${t.name}</div>
             `).join('');
 
-            // Generate EXACTLY 4 matches per group (pairing teams 2 by 2)
             const matches = [];
-            for (let i = 0; i < teams.length && matches.length < 4; i += 2) {
+            for (let i = 0; i < teams.length; i += 2) {
                 if (teams[i + 1]) {
                     matches.push({ team1: teams[i].name, team2: teams[i + 1].name });
-                } else {
-                    matches.push({ team1: teams[i].name, team2: teams[0].name });
                 }
             }
 
-            // Fill remaining if less than 4
-            let k = 0;
-            while(matches.length < 4 && teams.length >= 2) {
-                matches.push({ 
-                    team1: teams[k % teams.length].name, 
-                    team2: teams[(k + 1) % teams.length].name 
-                });
-                k++;
-            }
-
-            document.getElementById(matchesContainerId).innerHTML = matches.slice(0, 4).map((m, idx) => `
-                <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 flex justify-between items-center px-4 shadow-sm">
+            document.getElementById(matchesContainerId).innerHTML = matches.map((m, idx) => `
+                <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 flex justify-between items-center px-4">
                     <span class="text-xs font-black text-amber-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">مباراة ${idx + 1}</span>
-                    <span class="font-black text-slate-200 text-sm">${m.team1} <span class="text-amber-400 mx-2 font-black">VS</span> ${m.team2}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="font-black text-slate-200 text-sm">${m.team1}</span>
+                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <span class="text-amber-400 font-black text-xs">VS</span>
+                        <input type="number" min="0" placeholder="0" class="w-10 bg-slate-900 border border-slate-700 text-center font-bold text-amber-400 rounded-lg p-1 text-xs">
+                        <span class="font-black text-slate-200 text-sm">${m.team2}</span>
+                    </div>
                 </div>
             `).join('');
         }
