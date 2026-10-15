@@ -11,7 +11,7 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background: #030712; color: #f8fafc; }
         .bracket-bg {
-            background: radial-gradient(circle at center, rgba(30, 27, 75, 0.8) 0%, rgba(3, 7, 18, 0.98) 100%),
+            background: radial-gradient(circle at center, rgba(30, 27, 75, 0.85) 0%, rgba(3, 7, 18, 0.98) 100%),
                         linear-gradient(to right, rgba(220, 38, 38, 0.15), rgba(30, 58, 138, 0.15));
         }
         .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -44,7 +44,7 @@
                     2. المجموعات
                 </button>
                 <button onclick="switchTab('bracket')" id="btn-bracket" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all text-slate-400 hover:text-white">
-                    3. شجرة المونديال ⚽
+                    3. شجرة المونديال 🏆
                 </button>
             </div>
         </div>
@@ -141,7 +141,7 @@
                     <h2 class="text-2xl font-black gradient-gold flex items-center gap-2">
                         <i class="fa-solid fa-crown text-amber-400"></i> تحديد المتأهلين لشجرة المونديال
                     </h2>
-                    <p class="text-xs text-slate-400">اختر الفرق المتأهلة لتظهر مباشرة في ثيمة الطريق إلى النهائي</p>
+                    <p class="text-xs text-slate-400">اختر الفرق المتأهلة لتتغير بوضوح في ثيمة الطريق إلى النهائي</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -172,7 +172,7 @@
                 </div>
             </div>
 
-            <!-- WORLD CUP THEME VISUAL BRACKET -->
+            <!-- WORLD CUP THEME VISUAL BRACKET WITH CUP -->
             <div class="glass-panel p-6 sm:p-10 rounded-3xl text-center relative overflow-hidden border border-slate-800">
                 <h2 class="text-3xl sm:text-4xl font-black text-white tracking-widest uppercase mb-2">الطريق إلى النهـائي</h2>
                 <h3 class="text-xl font-bold gradient-gold mb-8">كـأس دوري قيـد الأرض</h3>
@@ -180,23 +180,20 @@
                 <!-- Symmetric Bracket Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
                     
-                    <!-- Left Branch -->
-                    <div class="space-y-6">
-                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-1.5 rounded-full border border-blue-500/20">المسار الأزرق (أ)</div>
-                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-blue-500/50 shadow-lg text-center">
-                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 1 - الطرف الأول</span>
+                    <!-- Left Branch (Group A) -->
+                    <div class="space-y-4">
+                        <div class="text-xs font-black text-blue-400 uppercase tracking-widest bg-blue-500/10 py-1.5 rounded-full border border-blue-500/20">المجموعة الأولى (أ)</div>
+                        <div id="wc-group-a-list" class="grid grid-cols-2 gap-2"></div>
+                        <div class="mt-4 bg-slate-900/90 p-4 rounded-2xl border-2 border-blue-500/50 shadow-lg text-center">
+                            <span class="text-xs text-slate-400 block mb-1">المتأهل الأول (أ1)</span>
                             <div id="wc-a1" class="text-lg font-black text-blue-300">أول المجموعة (أ)</div>
-                        </div>
-                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-blue-400/30 shadow-lg text-center">
-                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 2 - الطرف الثاني</span>
-                            <div id="wc-a2" class="text-lg font-black text-blue-200">ثاني المجموعة (أ)</div>
                         </div>
                     </div>
 
                     <!-- Center Trophy Section -->
                     <div class="flex flex-col items-center justify-center space-y-4 my-6 lg:my-0">
-                        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-b from-amber-400/20 via-amber-500/10 to-transparent p-2 border border-amber-500/30 flex items-center justify-center relative">
-                            <span class="text-7xl sm:text-8xl filter drop-shadow-[0_0_20px_rgba(245,158,11,0.5)]">🏆</span>
+                        <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-b from-amber-400/20 via-amber-500/10 to-transparent p-3 border-2 border-amber-500/40 flex items-center justify-center relative shadow-[0_0_50px_rgba(245,158,11,0.2)]">
+                            <span class="text-8xl sm:text-9xl filter drop-shadow-[0_0_25px_rgba(245,158,11,0.6)]">🏆</span>
                         </div>
                         <div class="bg-slate-950/90 border border-amber-500/40 p-4 rounded-2xl text-center w-full shadow-2xl">
                             <span class="text-xs font-black text-amber-400 block tracking-widest uppercase">المباراة النهائية</span>
@@ -204,16 +201,13 @@
                         </div>
                     </div>
 
-                    <!-- Right Branch -->
-                    <div class="space-y-6">
-                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-1.5 rounded-full border border-red-500/20">المسار الأحمر (ب)</div>
-                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-red-500/50 shadow-lg text-center">
-                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 2 - الطرف الأول</span>
+                    <!-- Right Branch (Group B) -->
+                    <div class="space-y-4">
+                        <div class="text-xs font-black text-red-400 uppercase tracking-widest bg-red-500/10 py-1.5 rounded-full border border-red-500/20">المجموعة الثانية (ب)</div>
+                        <div id="wc-group-b-list" class="grid grid-cols-2 gap-2"></div>
+                        <div class="mt-4 bg-slate-900/90 p-4 rounded-2xl border-2 border-red-500/50 shadow-lg text-center">
+                            <span class="text-xs text-slate-400 block mb-1">المتأهل الأول (ب1)</span>
                             <div id="wc-b1" class="text-lg font-black text-red-300">أول المجموعة (ب)</div>
-                        </div>
-                        <div class="bg-slate-900/90 p-4 rounded-2xl border-2 border-red-400/30 shadow-lg text-center">
-                            <span class="text-xs text-slate-400 block mb-1">نصف النهائي 1 - الطرف الثاني</span>
-                            <div id="wc-b2" class="text-lg font-black text-red-200">ثاني المجموعة (ب)</div>
                         </div>
                     </div>
 
@@ -295,6 +289,7 @@
 
             renderGroup('group-a-teams', 'group-a-matches', groupAStore);
             renderGroup('group-b-teams', 'group-b-matches', groupBStore);
+            renderWorldCupTeams();
             populateQualifierDropdowns();
 
             confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
@@ -321,6 +316,15 @@
             `).join('');
         }
 
+        function renderWorldCupTeams() {
+            document.getElementById('wc-group-a-list').innerHTML = groupAStore.map(t => `
+                <div class="bg-slate-900/80 p-2 rounded-xl border border-blue-500/30 text-xs font-bold text-blue-200">${t.name}</div>
+            `).join('');
+            document.getElementById('wc-group-b-list').innerHTML = groupBStore.map(t => `
+                <div class="bg-slate-900/80 p-2 rounded-xl border border-red-500/30 text-xs font-bold text-red-200">${t.name}</div>
+            `).join('');
+        }
+
         function populateQualifierDropdowns() {
             const fillOptions = (elemId, teams) => {
                 const elem = document.getElementById(elemId);
@@ -336,14 +340,10 @@
 
         function updateWorldCupBracket() {
             const a1 = document.getElementById('qualifier-a1').value || 'أول المجموعة (أ)';
-            const a2 = document.getElementById('qualifier-a2').value || 'ثاني المجموعة (أ)';
             const b1 = document.getElementById('qualifier-b1').value || 'أول المجموعة (ب)';
-            const b2 = document.getElementById('qualifier-b2').value || 'ثاني المجموعة (ب)';
 
             document.getElementById('wc-a1').innerText = a1;
-            document.getElementById('wc-a2').innerText = a2;
             document.getElementById('wc-b1').innerText = b1;
-            document.getElementById('wc-b2').innerText = b2;
         }
 
         window.onload = initTeams;
