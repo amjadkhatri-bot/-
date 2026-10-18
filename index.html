@@ -15,7 +15,7 @@
             --gold-gradient: linear-gradient(135deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
             --gold-glow: 0 0 20px rgba(245, 208, 97, 0.6);
             --bg-dark: #05120a;
-            --card-bg: rgba(10, 28, 18, 0.92);
+            --card-bg: rgba(10, 28, 18, 0.95);
             --border-gold: #d4af37;
         }
 
@@ -28,7 +28,7 @@
         }
 
         body {
-            background: #000 url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background: #030c07 url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
             min-height: 100vh;
@@ -44,7 +44,7 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle, rgba(5, 18, 10, 0.8) 0%, rgba(2, 8, 4, 0.97) 100%);
+            background: radial-gradient(circle, rgba(5, 18, 10, 0.85) 0%, rgba(2, 8, 4, 0.98) 100%);
             z-index: 0;
         }
 
@@ -53,25 +53,24 @@
             z-index: 1;
             width: 100%;
             max-width: 1350px;
-            padding: 15px;
+            padding: 10px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* الهيدر وأزرار الخدمات */
         header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 5px;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
         .header-titles h1 {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 900;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
@@ -80,29 +79,29 @@
         }
 
         .header-titles h2 {
-            font-size: 18px;
+            font-size: 15px;
             color: #e2e8f0;
             font-weight: 700;
         }
 
         .top-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .btn-action {
             background: rgba(212, 175, 55, 0.15);
             border: 1px solid var(--border-gold);
             color: var(--gold-primary);
-            padding: 8px 18px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .btn-action:hover {
@@ -114,11 +113,10 @@
         /* مسرح القرعة */
         .draw-stage {
             display: grid;
-            grid-template-columns: 290px 1fr 290px;
-            gap: 15px;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 10px;
             width: 100%;
             align-items: center;
-            margin-top: 5px;
         }
 
         @media (max-width: 1024px) {
@@ -130,24 +128,24 @@
         .matches-column {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--border-gold);
-            border-radius: 10px;
-            padding: 8px 10px;
+            border-radius: 8px;
+            padding: 6px 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             text-align: center;
             backdrop-filter: blur(8px);
         }
 
         .match-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--gold-primary);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .match-teams {
@@ -160,14 +158,14 @@
         .team-box {
             flex: 1;
             background: linear-gradient(180deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
-            border-radius: 6px;
-            padding: 6px 2px;
-            min-height: 42px;
+            border-radius: 5px;
+            padding: 5px 2px;
+            min-height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 13px;
+            font-size: 12px;
             color: #000;
             box-shadow: inset 0 0 5px rgba(255,255,255,0.4);
         }
@@ -176,15 +174,15 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1px dashed var(--border-gold);
             color: var(--gold-primary);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .vs-badge {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
             color: #fff;
             background: rgba(212, 175, 55, 0.3);
-            padding: 2px 5px;
+            padding: 2px 4px;
             border-radius: 50%;
             border: 1px solid var(--border-gold);
         }
@@ -192,15 +190,15 @@
         .match-status {
             font-size: 10px;
             color: #cbd5e1;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         /* العجلة الدائرية وكرة كأس العالم 2022 */
         .wheel-center-container {
             position: relative;
             width: 100%;
-            max-width: 440px;
-            height: 440px;
+            max-width: 410px;
+            height: 410px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -221,17 +219,16 @@
             to { transform: rotate(360deg); }
         }
 
-        /* تصميم كرة الرحلة - كأس العالم قطر 2022 */
         .center-ball-alrihla {
             position: absolute;
-            width: 125px;
-            height: 125px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            box-shadow: var(--gold-glow), inset -6px -6px 20px rgba(0,0,0,0.8);
+            box-shadow: var(--gold-glow), inset -5px -5px 15px rgba(0,0,0,0.8);
             z-index: 2;
             border: 3px solid #fff;
             overflow: hidden;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e2e8f0 70%, #94a3b8 100%);
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #cbd5e1 70%, #64748b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -242,7 +239,6 @@
             height: 100%;
         }
 
-        /* البطاقات الذهبية على العجلة */
         .wheel-cards {
             position: absolute;
             width: 100%;
@@ -254,10 +250,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 52px;
-            height: 66px;
-            margin-top: -33px;
-            margin-left: -26px;
+            width: 48px;
+            height: 60px;
+            margin-top: -30px;
+            margin-left: -24px;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -271,13 +267,13 @@
             width: 100%;
             height: 100%;
             background: var(--gold-gradient);
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid #fff;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             color: #000;
             position: relative;
@@ -297,22 +293,20 @@
             right: -4px;
             background: #22c55e;
             color: #fff;
-            font-size: 10px;
-            width: 16px;
-            height: 16px;
+            font-size: 9px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 5;
-            box-shadow: 0 0 5px #22c55e;
         }
 
-        /* شريط التحكم السفلي */
         .controls-bar {
-            margin-top: 15px;
+            margin-top: 10px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
@@ -322,16 +316,16 @@
             background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
             color: #fff;
             border: 2px solid #86efac;
-            padding: 10px 25px;
-            font-size: 16px;
+            padding: 8px 22px;
+            font-size: 15px;
             font-weight: 800;
             border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-draw:hover {
@@ -343,8 +337,8 @@
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
             border: 1px solid #ef4444;
-            padding: 8px 18px;
-            font-size: 13px;
+            padding: 6px 15px;
+            font-size: 12px;
             font-weight: 700;
             border-radius: 20px;
             cursor: pointer;
@@ -356,7 +350,6 @@
             color: #fff;
         }
 
-        /* نافذة الكشف منبثقة */
         .reveal-modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -393,53 +386,32 @@
         }
 
         .reveal-card .team-name {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 900;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .reveal-card .dest-text {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             background: rgba(0,0,0,0.15);
-            padding: 5px 12px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
         }
 
-        /* طباعة رسمية */
         @media print {
-            body {
-                background: #fff !important;
-                color: #000 !important;
-            }
-            body::before, .wheel-center-container, .controls-bar, .top-actions {
-                display: none !important;
-            }
-            .match-card {
-                background: #fff !important;
-                border: 1px solid #000 !important;
-                box-shadow: none !important;
-                color: #000 !important;
-                page-break-inside: avoid;
-            }
-            .match-title, .match-status {
-                color: #000 !important;
-            }
-            .team-box {
-                background: #eee !important;
-                color: #000 !important;
-                border: 1px solid #000 !important;
-            }
-            .draw-stage {
-                grid-template-columns: 1fr 1fr !important;
-            }
+            body { background: #fff !important; color: #000 !important; }
+            body::before, .wheel-center-container, .controls-bar, .top-actions { display: none !important; }
+            .match-card { background: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; color: #000 !important; }
+            .match-title, .match-status { color: #000 !important; }
+            .team-box { background: #eee !important; color: #000 !important; border: 1px solid #000 !important; }
+            .draw-stage { grid-template-columns: 1fr 1fr !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- الهيدر والخدمات -->
         <header>
             <div class="header-titles">
                 <h1>سحب قرعة دوري قيد الأرض لكرة القدم للعام الدراسي 2026/2027م</h1>
@@ -450,14 +422,186 @@
             </div>
         </header>
 
-        <!-- مسرح القرعة والعجلة -->
         <div class="draw-stage">
             <div class="matches-column" id="left-matches"></div>
 
             <div class="wheel-center-container">
                 <div class="wheel-ring"></div>
                 
-                <!-- تصميم كرة الرحلة - كأس العالم قطر 2022 -->
+                <!-- تصميم كرة الرحلة كأس العالم قطر 2022 الدقيق -->
                 <div class="center-ball-alrihla">
                     <svg class="alrihla-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="48" fill="#f8fafc" stroke="#cbd5e1" stroke
+                        <circle cx="50" cy="50" r="48" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+                        <path d="M 15,35 Q 35,15 65,25 T 85,60" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M 10,45 Q 40,25 70,40 T 90,75" fill="none" stroke="#3b82f6" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M 20,60 Q 50,85 80,65" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M 30,20 Q 70,30 80,80" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="50,22 58,35 42,35" fill="#1e293b"/>
+                        <polygon points="30,55 42,65 32,75" fill="#1e293b"/>
+                        <polygon points="70,50 82,42 78,58" fill="#1e293b"/>
+                        <circle cx="50" cy="50" r="5" fill="#d4af37"/>
+                    </svg>
+                </div>
+
+                <div class="wheel-cards" id="wheel-cards-container"></div>
+            </div>
+
+            <div class="matches-column" id="right-matches"></div>
+        </div>
+
+        <div class="controls-bar">
+            <button class="btn-draw" onclick="drawRandomCard()">
+                <span>🎲</span> ابدأ السحب بالضغط على أحد المربعات الذهبية
+            </button>
+            <button class="btn-reset" onclick="resetDraw()">إعادة القرعة 🔄</button>
+        </div>
+    </div>
+
+    <div class="reveal-modal" id="reveal-modal">
+        <div class="reveal-card">
+            <h3>تم سحب الفريق</h3>
+            <div class="team-name" id="modal-team-name">فريق 11/1</div>
+            <div class="dest-text" id="modal-dest-text">يتجه إلى مباراة 1</div>
+        </div>
+    </div>
+
+    <script>
+        const INITIAL_TEAMS = [
+            "فريق 11/1", "فريق 11/2", "فريق 11/3", "فريق 11/4",
+            "فريق 11/5", "فريق 11/6", "فريق 11/7", "فريق 11/8",
+            "فريق 12/1", "فريق 12/2", "فريق 12/3", "فريق 12/4",
+            "فريق 12/5", "فريق 12/6", "فريق 12/7", "فريق 12/8"
+        ];
+
+        let state = loadState();
+
+        function loadState() {
+            const saved = localStorage.getItem('qayd_draw_state_2026');
+            if (saved) {
+                try { return JSON.parse(saved); } catch (e) {}
+            }
+            return {
+                matches: Array.from({ length: 8 }, (_, i) => ({ id: i + 1, team1: null, team2: null })),
+                drawnSlots: new Array(16).fill(false),
+                availableTeams: [...INITIAL_TEAMS]
+            };
+        }
+
+        function saveState() {
+            localStorage.setItem('qayd_draw_state_2026', JSON.stringify(state));
+        }
+
+        function renderApp() {
+            renderMatches();
+            renderWheel();
+        }
+
+        function renderMatches() {
+            const leftCol = document.getElementById('left-matches');
+            const rightCol = document.getElementById('right-matches');
+            leftCol.innerHTML = '';
+            rightCol.innerHTML = '';
+
+            state.matches.forEach((m, idx) => {
+                const card = document.createElement('div');
+                card.className = `match-card`;
+                const statusText = !m.team1 && !m.team2 ? 'في انتظار السحب...' : 
+                                   (m.team1 && m.team2 ? 'مكتملة ✅' : 'في انتظار الطرف الثاني...');
+
+                card.innerHTML = `
+                    <div class="match-title">مباراة ${m.id}</div>
+                    <div class="match-teams">
+                        <div class="team-box ${!m.team1 ? 'empty' : ''}">${m.team1 || '?'}</div>
+                        <div class="vs-badge">ضد</div>
+                        <div class="team-box ${!m.team2 ? 'empty' : ''}">${m.team2 || '?'}</div>
+                    </div>
+                    <div class="match-status">${statusText}</div>
+                `;
+
+                if (idx < 4) rightCol.appendChild(card);
+                else leftCol.appendChild(card);
+            });
+        }
+
+        function renderWheel() {
+            const container = document.getElementById('wheel-cards-container');
+            container.innerHTML = '';
+            const radius = 150;
+            const total = 16;
+
+            for (let i = 0; i < total; i++) {
+                const angle = (i * (360 / total)) * (Math.PI / 180);
+                const x = radius * Math.cos(angle);
+                const y = radius * Math.sin(angle);
+
+                const slot = document.createElement('div');
+                slot.className = `wheel-card-slot ${state.drawnSlots[i] ? 'drawn' : ''}`;
+                slot.style.transform = `translate(${x}px, ${y}px)`;
+                slot.onclick = () => handleCardClick(i);
+
+                slot.innerHTML = `<div class="card-inner">؟</div>`;
+                container.appendChild(slot);
+            }
+        }
+
+        function handleCardClick(slotIndex) {
+            if (state.drawnSlots[slotIndex] || state.availableTeams.length === 0) return;
+
+            const randomTeamIndex = Math.floor(Math.random() * state.availableTeams.length);
+            const selectedTeam = state.availableTeams.splice(randomTeamIndex, 1)[0];
+            state.drawnSlots[slotIndex] = true;
+
+            let targetMatch = state.matches.find(m => !m.team1 || !m.team2);
+            let slotPosition = '';
+            if (targetMatch) {
+                if (!targetMatch.team1) {
+                    targetMatch.team1 = selectedTeam;
+                    slotPosition = 'طرف أول';
+                } else {
+                    targetMatch.team2 = selectedTeam;
+                    slotPosition = 'طرف ثاني';
+                }
+            }
+
+            showRevealModal(selectedTeam, `مباراة ${targetMatch.id} (${slotPosition})`);
+            saveState();
+            renderApp();
+
+            if (targetMatch.team1 && targetMatch.team2) {
+                setTimeout(() => {
+                    confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+                }, 500);
+            }
+        }
+
+        function drawRandomCard() {
+            const undrawn = state.drawnSlots.map((d, idx) => d ? null : idx).filter(v => v !== null);
+            if (undrawn.length === 0) return;
+            const randomIdx = undrawn[Math.floor(Math.random() * undrawn.length)];
+            handleCardClick(randomIdx);
+        }
+
+        function showRevealModal(teamName, destText) {
+            const modal = document.getElementById('reveal-modal');
+            document.getElementById('modal-team-name').innerText = teamName;
+            document.getElementById('modal-dest-text').innerText = `يتجه إلى ${destText}`;
+            modal.classList.add('active');
+            setTimeout(() => modal.classList.remove('active'), 1500);
+        }
+
+        function resetDraw() {
+            if (!confirm("هل أنت متأكد من إعادة إجراء القرعة بالكامل؟")) return;
+            state = {
+                matches: Array.from({ length: 8 }, (_, i) => ({ id: i + 1, team1: null, team2: null })),
+                drawnSlots: new Array(16).fill(false),
+                availableTeams: [...INITIAL_TEAMS]
+            };
+            saveState();
+            renderApp();
+        }
+
+        // تشغيل فوري للواجهة
+        renderApp();
+    </script>
+</body>
+</html>
