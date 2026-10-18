@@ -16,7 +16,7 @@
             --gold-primary: #f5d061;
             --gold-gradient: linear-gradient(135deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
             --gold-glow: 0 0 20px rgba(245, 208, 97, 0.6);
-            --bg-dark: #05120a;
+            --bg-dark: #030c07;
             --card-bg: rgba(10, 28, 18, 0.95);
             --border-gold: #d4af37;
         }
@@ -109,12 +109,14 @@
             box-shadow: var(--gold-glow);
         }
 
+        /* تنسيق مسرح القرعة والمباريات الجانبية */
         .draw-stage {
             display: grid;
-            grid-template-columns: 280px 1fr 280px;
-            gap: 10px;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 15px;
             width: 100%;
             align-items: center;
+            margin-top: 5px;
         }
 
         @media (max-width: 1024px) {
@@ -158,7 +160,7 @@
             background: linear-gradient(180deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
             border-radius: 5px;
             padding: 5px 2px;
-            min-height: 38px;
+            min-height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -191,6 +193,7 @@
             margin-top: 2px;
         }
 
+        /* العجلة الدائرية والكرة 3D والبطاقات الـ 16 */
         .wheel-center-container {
             position: relative;
             width: 100%;
@@ -218,8 +221,8 @@
 
         #ball-3d-container {
             position: absolute;
-            width: 130px;
-            height: 130px;
+            width: 125px;
+            height: 125px;
             border-radius: 50%;
             z-index: 2;
             cursor: pointer;
@@ -237,10 +240,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 48px;
-            height: 60px;
-            margin-top: -30px;
-            margin-left: -24px;
+            width: 44px;
+            height: 58px;
+            margin-top: -29px;
+            margin-left: -22px;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -410,7 +413,7 @@
             <div class="wheel-center-container">
                 <div class="wheel-ring"></div>
                 
-                <!-- حاوية الكرة ثلاثية الأبعاد 3D -->
+                <!-- حاوية كرة القدم ثلاثية الأبعاد 3D -->
                 <div id="ball-3d-container"></div>
 
                 <div class="wheel-cards" id="wheel-cards-container"></div>
@@ -436,7 +439,6 @@
     </div>
 
     <script>
-        // رابط قاعدة بيانات الفايربيز المباشرة الخاصة بك
         const DB_URL = "https://qayd-draw-default-rtdb.firebaseio.com/qayd_draw_2026.json";
 
         const INITIAL_TEAMS = [
@@ -465,7 +467,6 @@
             localStorage.setItem('qayd_draw_state_2026', JSON.stringify(state));
             renderApp();
             
-            // إرسال البيانات فوراً إلى الفايربيز للمزامنة بين الأجهزة
             try {
                 await fetch(DB_URL, {
                     method: 'PUT',
@@ -479,7 +480,7 @@
             try {
                 const res = await fetch(DB_URL);
                 const data = await res.json();
-                if (data && data.matches) {
+                if (data && data.matches && data.availableTeams) {
                     state = data;
                     localStorage.setItem('qayd_draw_state_2026', JSON.stringify(state));
                     renderApp();
@@ -487,7 +488,7 @@
             } catch (e) {}
         }
 
-        // --- كرة القدم ثلاثية الأبعاد 3D (كرة مونديال قطر 2022) ---
+        // --- بناء الكرة ثلاثية الأبعاد 3D (مونديال قطر 2022) ---
         let scene, camera, renderer, ballMesh;
 
         function init3DBall() {
@@ -499,7 +500,7 @@
             camera.position.z = 2.8;
 
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(130, 130);
+            renderer.setSize(125, 125);
             container.appendChild(renderer.domElement);
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
@@ -562,7 +563,7 @@
             animate();
         }
 
-        // --- عرض الواجهة والمباريات ---
+        // --- عرض المباريات والبطاقات فوراً ---
         function renderApp() {
             renderMatches();
             renderWheel();
@@ -640,4 +641,52 @@
                     slotPosition = 'طرف أول';
                 } else {
                     targetMatch.team2 = selectedTeam;
-                    slotPosition = 'طرف ثاني
+                    slotPosition = 'طرف ثاني';
+                }
+            }
+
+            showRevealModal(selectedTeam, `مباراة ${targetMatch.id} (${slotPosition})`);
+            saveState(state);
+
+            if (targetMatch.team1 && targetMatch.team2) {
+                setTimeout(() => {
+                    confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+                }, 400);
+            }
+        }
+
+        function drawRandomCard() {
+            const undrawn = state.drawnSlots.map((d, idx) => d ? null : idx).filter(v => v !== null);
+            if (undrawn.length === 0) return;
+            const randomIdx = undrawn[Math.floor(Math.random() * undrawn.length)];
+            handleCardClick(randomIdx);
+        }
+
+        function showRevealModal(teamName, destText) {
+            const modal = document.getElementById('reveal-modal');
+            document.getElementById('modal-team-name').innerText = teamName;
+            document.getElementById('modal-dest-text').innerText = `يتجه إلى ${destText}`;
+            modal.classList.add('active');
+            setTimeout(() => modal.classList.remove('active'), 1500);
+        }
+
+        function resetDraw() {
+            if (!confirm("هل أنت متأكد من إعادة إجراء القرعة بالكامل؟")) return;
+            const newState = {
+                matches: Array.from({ length: 8 }, (_, i) => ({ id: i + 1, team1: null, team2: null })),
+                drawnSlots: new Array(16).fill(false),
+                availableTeams: [...INITIAL_TEAMS]
+            };
+            saveState(newState);
+        }
+
+        // تشغيل فوري للواجهة مع المزامنة التلقائية
+        window.onload = () => {
+            renderApp();
+            init3DBall();
+            fetchCloudState();
+            setInterval(fetchCloudState, 2500);
+        };
+    </script>
+</body>
+</html>
