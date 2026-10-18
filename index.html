@@ -3,652 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة قرعة دوري قيد الأرض لكرة القدم 2026-2027 | مدرسة الإمام سيف بن سلطان</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Three.js for 3D Ball Rendering -->
+    <title>دوري قيد الأرض 2026-2027 - مدرسة الإمام سيف بن سلطان</title>
+    <!-- خط تجوال العربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Three.js للرسومات 3D -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        gold: {
-                            100: '#FDF8E2',
-                            300: '#F5E1A4',
-                            400: '#E6C875',
-                            500: '#D4AF37',
-                            600: '#AA820A',
-                            700: '#856404'
-                        },
-                        darkgreen: {
-                            800: '#0B2B1B',
-                            900: '#051A10',
-                            950: '#020D08'
-                        }
-                    },
-                    fontFamily: {
-                        cairo: ['Cairo', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- مكتبة المؤثرات الاحتفالية -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- مكتبات Firebase للمزامنة السحابية الفورية -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: radial-gradient(circle at center, #0B2B1B 0%, #051A10 70%, #020D08 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
+        :root {
+            --gold-primary: #f5d061;
+            --gold-gradient: linear-gradient(135deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
+            --gold-glow: 0 0 20px rgba(245, 208, 97, 0.6);
+            --bg-dark: #05120a;
+            --card-bg: rgba(10, 28, 18, 0.95);
+            --border-gold: #d4af37;
         }
 
-        .gold-text {
-            background: linear-gradient(135deg, #FFF1B0 0%, #D4AF37 50%, #AA820A 100%);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: #030c07 url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(5, 18, 10, 0.85) 0%, rgba(2, 8, 4, 0.98) 100%);
+            z-index: 0;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1350px;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 5px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-titles h1 {
+            font-size: 22px;
+            font-weight: 900;
+            background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        .gold-card {
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.2) 0%, rgba(11, 43, 27, 0.85) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(212, 175, 55, 0.15);
+        .header-titles h2 {
+            font-size: 15px;
+            color: #e2e8f0;
+            font-weight: 700;
         }
 
-        .gold-card-drawn {
-            background: linear-gradient(145deg, #D4AF37 0%, #AA820A 100%);
-            color: #020D08;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        .top-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        /* Wheel positioning */
-        .wheel-container {
+        .btn-action {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--border-gold);
+            color: var(--gold-primary);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-action:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: var(--gold-glow);
+        }
+
+        /* مسرح القرعة */
+        .draw-stage {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+        }
+
+        @media (max-width: 1024px) {
+            .draw-stage {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matches-column {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            padding: 6px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .match-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--gold-primary);
+            margin-bottom: 2px;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        .team-box {
+            flex: 1;
+            background: linear-gradient(180deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
+            border-radius: 5px;
+            padding: 5px 2px;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 12px;
+            color: #000;
+            box-shadow: inset 0 0 5px rgba(255,255,255,0.4);
+        }
+
+        .team-box.empty {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--border-gold);
+            color: var(--gold-primary);
+            font-size: 13px;
+        }
+
+        .vs-badge {
+            font-size: 10px;
+            font-weight: 900;
+            color: #fff;
+            background: rgba(212, 175, 55, 0.3);
+            padding: 2px 4px;
+            border-radius: 50%;
+            border: 1px solid var(--border-gold);
+        }
+
+        .match-status {
+            font-size: 10px;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        /* العجلة الدائرية والكرة 3D */
+        .wheel-center-container {
             position: relative;
-            width: min(88vw, 440px);
-            height: min(88vw, 440px);
+            width: 100%;
+            max-width: 420px;
+            height: 420px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* 3D Canvas Center Container */
-        .center-ball-3d {
+        .wheel-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed rgba(212, 175, 55, 0.4);
+            animation: rotateBg 60s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* حاوية الكرة ثلاثية الأبعاد 3D */
+        #ball-3d-container {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            z-index: 2;
+            cursor: pointer;
+            box-shadow: var(--gold-glow);
+        }
+
+        .wheel-cards {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+        }
+
+        .wheel-card-slot {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(34vw, 150px);
-            height: min(34vw, 150px);
-            border-radius: 50%;
-            border: 2px solid #D4AF37;
-            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(212, 175, 55, 0.4);
-            z-index: 20;
-            overflow: hidden;
-            background: radial-gradient(circle, #0B2B1B 0%, #020D08 100%);
+            width: 48px;
+            height: 60px;
+            margin-top: -30px;
+            margin-left: -24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        #ball3dCanvas {
+        .wheel-card-slot:hover {
+            scale: 1.15;
+            z-index: 10;
+        }
+
+        .card-inner {
             width: 100%;
             height: 100%;
-            display: block;
+            background: var(--gold-gradient);
+            border-radius: 6px;
+            border: 1px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 900;
+            color: #000;
+            position: relative;
         }
 
-        .pulse-gold {
-            animation: goldPulse 2s infinite;
+        .wheel-card-slot.drawn .card-inner {
+            background: #1e293b;
+            border-color: #475569;
+            color: #64748b;
+            opacity: 0.5;
         }
 
-        @keyframes goldPulse {
-            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { box-shadow: 0 0 0 18px rgba(212, 175, 55, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        .wheel-card-slot.drawn::after {
+            content: '✔';
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #22c55e;
+            color: #fff;
+            font-size: 9px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
         }
 
-        /* Modal Bounce */
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop {
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-only {
-                display: block !important;
-            }
-            .match-box {
-                border: 1px solid #000 !important;
-                background: #fdfdfd !important;
-                color: black !important;
-                page-break-inside: avoid;
-            }
-            .match-box * {
-                color: black !important;
-                text-shadow: none !important;
-            }
-        }
-    </style>
-</head>
-<body class="flex flex-col min-h-screen">
-
-    <!-- Header Section -->
-    <header class="text-center py-3 px-3 border-b border-gold-500/30 bg-darkgreen-900/90 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-gold-500/20 border border-gold-500 flex items-center justify-center text-gold-400 text-2xl font-bold shadow-md">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <div class="text-right">
-                    <h1 class="text-xl sm:text-2xl font-black gold-text">دوري قيد الأرض لكرة القدم</h1>
-                    <p class="text-xs sm:text-sm text-gold-300">مدرسة الإمام سيف بن سلطان (11-12) | العام الدراسي 2026-2027</p>
-                </div>
-            </div>
-
-            <!-- Header Controls -->
-            <div class="flex items-center gap-2 no-print">
-                <!-- Sync Status Indicator -->
-                <div id="syncStatus" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-darkgreen-800 border border-gold-500/30 text-xs text-gold-300">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-                    <span>جاري جلب الاتصال المباشر...</span>
-                </div>
-
-                <!-- Print Button -->
-                <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-darkgreen-950 font-bold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-lg active:scale-95">
-                    <i class="fa-solid fa-print"></i>
-                    <span>طباعة / PDF</span>
-                </button>
-
-                <!-- Reset Button -->
-                <button onclick="confirmReset()" class="px-3 py-1.5 rounded-lg bg-red-900/60 hover:bg-red-800 text-red-200 border border-red-500/40 text-xs sm:text-sm transition flex items-center gap-1 active:scale-95">
-                    <i class="fa-solid fa-rotate-right"></i>
-                    <span>إعادة ضبط</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl w-full mx-auto p-2 sm:p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-
-        <!-- Matches Left Column (1-4) -->
-        <section class="lg:col-span-3 space-y-3 order-2 lg:order-1">
-            <h2 class="text-base sm:text-lg font-bold text-gold-400 text-center border-b border-gold-500/30 pb-2 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-gold-500"></i> المباريات (1 - 4)
-            </h2>
-            <div id="matchesLeft" class="space-y-3">
-                <!-- Match Cards 1-4 JS injected -->
-            </div>
-        </section>
-
-        <!-- Central Wheel Area (3D Ball Wheel) -->
-        <section class="lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-2 my-2 lg:my-0 no-print">
-            <div class="text-center mb-3">
-                <span class="bg-gold-500/10 border border-gold-500/40 text-gold-300 text-xs px-4 py-1.5 rounded-full font-semibold inline-flex items-center gap-2">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    مزامنة فورية حية على جميع الشاشات والأجهزة
-                </span>
-                <p class="text-xs text-gray-300 mt-2">اضغط على أي رقم بطاقة لسحب الفريق وتسكينه آلياً أمام الجميع</p>
-            </div>
-
-            <!-- Circular Wheel Container -->
-            <div class="wheel-container my-3" id="wheelContainer">
-                <!-- 3D Interactive Football Canvas in Center -->
-                <div class="center-ball-3d pulse-gold" id="ball3dContainer">
-                    <canvas id="ball3dCanvas"></canvas>
-                </div>
-
-                <!-- 16 Radial Cards rendered by JS -->
-            </div>
-
-            <!-- Draw Info Status -->
-            <div class="mt-2 text-center bg-darkgreen-800/90 border border-gold-500/30 rounded-xl p-3 w-full max-w-md backdrop-blur shadow-lg">
-                <div class="text-xs text-gold-400 font-semibold mb-0.5">حالة السحب المباشر</div>
-                <div id="currentDrawStatus" class="text-sm sm:text-base font-bold text-white">
-                    جاري تحميل بيانات القرعة...
-                </div>
-            </div>
-        </section>
-
-        <!-- Matches Right Column (5-8) -->
-        <section class="lg:col-span-3 space-y-3 order-3 lg:order-3">
-            <h2 class="text-base sm:text-lg font-bold text-gold-400 text-center border-b border-gold-500/30 pb-2 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-shield-halved text-gold-500"></i> المباريات (5 - 8)
-            </h2>
-            <div id="matchesRight" class="space-y-3">
-                <!-- Match Cards 5-8 JS injected -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Printable Official Header (Only Visible When Printing) -->
-    <div class="hidden print-only p-8 text-center border-b-2 border-black mb-6">
-        <h1 class="text-2xl font-bold">مدرسة الإمام سيف بن سلطان (11-12)</h1>
-        <h2 class="text-xl font-bold mt-2">النتائج الرسمية لقرعة دوري قيد الأرض لكرة القدم 2026-2027</h2>
-        <p class="text-sm text-gray-600 mt-1">تاريخ واعتماد القرعة: <span id="printDate"></span></p>
-    </div>
-
-    <!-- Modal for Result Notification -->
-    <div id="resultModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-darkgreen-900 border-2 border-gold-500 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-pop">
-            <div class="w-16 h-16 rounded-full bg-gold-500/20 border-2 border-gold-500 mx-auto flex items-center justify-center text-gold-400 text-3xl mb-3 shadow-lg">
-                <i class="fa-solid fa-bullhorn"></i>
-            </div>
-            <h3 class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-1">نتيجة السحب المباشر</h3>
-            <div id="modalTeamName" class="text-3xl font-black text-white gold-text my-2">فريق 11/1</div>
-            <p id="modalMatchInfo" class="text-sm text-gray-200 mb-5 leading-relaxed">تم تسكينه في المباراة رقم 1</p>
-            <button onclick="closeModal()" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-darkgreen-950 font-black rounded-xl text-sm transition shadow-lg active:scale-95">
-                متابعة القرعة
-            </button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-gold-500/70 border-t border-gold-500/20 bg-darkgreen-950 mt-auto no-print">
-        <p>© 2026-2027 مدرسة الإمام سيف بن سلطان (11-12) - جميع الحقوق محفوظة</p>
-    </footer>
-
-    <!-- Main Logic Script (Firebase + 3D Ball + Realtime Sync) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase Setup & Initialization
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'kayd-al-ard-2026';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : { apiKey: "demo", authDomain: "demo.firebaseapp.com", projectId: "demo" };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Firestore Realtime Document Reference
-        const drawDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tournament', 'drawState');
-
-        // Teams List (16 Teams: 11/1 to 12/8)
-        const TEAMS = [
-            "فريق 11/1", "فريق 11/2", "فريق 11/3", "فريق 11/4",
-            "فريق 11/5", "فريق 11/6", "فريق 11/7", "فريق 11/8",
-            "فريق 12/1", "فريق 12/2", "فريق 12/3", "فريق 12/4",
-            "فريق 12/5", "فريق 12/6", "فريق 12/7", "فريق 12/8"
-        ];
-
-        // Default App State
-        let state = {
-            drawnCards: [],
-            assignments: {},
-            matches: Array(8).fill(null).map(() => ({ teamA: null, teamB: null })),
-            lastDrawn: null
-        };
-
-        let lastSyncedStateJSON = "";
-
-        // ----------------------------------------------------
-        // 1. Firebase Realtime Synchronization Logic
-        // ----------------------------------------------------
-        async function initSync() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
-                updateSyncStatus(true, "مُتصل مباشر (Realtime)");
-
-                // Realtime Listener
-                onSnapshot(drawDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (data && data.matches) {
-                            const newJSON = JSON.stringify(data);
-                            // Detect external change to trigger modal/effects
-                            if (lastSyncedStateJSON && lastSyncedStateJSON !== newJSON) {
-                                if (data.lastDrawn && (!state.lastDrawn || state.lastDrawn.team !== data.lastDrawn.team)) {
-                                    triggerDrawEffects(data.lastDrawn.team, data.lastDrawn.matchNum, data.lastDrawn.slot);
-                                }
-                            }
-                            lastSyncedStateJSON = newJSON;
-                            state = data;
-                            renderUI();
-                        }
-                    } else {
-                        // First time init
-                        saveState(state);
-                    }
-                }, (err) => {
-                    console.error("Firestore sync error:", err);
-                    updateSyncStatus(false, "أوفلاين (مُحلي)");
-                });
-
-            } catch (err) {
-                console.warn("Auth warning, fallback to local:", err);
-                updateSyncStatus(false, "وضع أوفلاين");
-            }
+        .controls-bar {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        async function saveState(newState) {
-            state = newState;
-            lastSyncedStateJSON = JSON.stringify(newState);
-            renderUI();
-            try {
-                await setDoc(drawDocRef, state);
-            } catch (e) {
-                console.error("Error writing state to firestore:", e);
-            }
-        }
-
-        function updateSyncStatus(isOnline, text) {
-            const el = document.getElementById('syncStatus');
-            if (el) {
-                el.innerHTML = `
-                    <span class="w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-emerald-400' : 'bg-amber-500'}"></span>
-                    <span>${text}</span>
-                `;
-            }
-        }
-
-        // ----------------------------------------------------
-        // 2. Render UI Components
-        // ----------------------------------------------------
-        function renderUI() {
-            renderWheel();
-            renderMatches();
-            updateStatusText();
-        }
-
-        function renderWheel() {
-            const container = document.getElementById('wheelContainer');
-            if (!container) return;
-
-            // Remove existing cards, keep 3D center container
-            const existingCards = container.querySelectorAll('.wheel-card');
-            existingCards.forEach(c => c.remove());
-
-            const totalCards = 16;
-            const radius = Math.min(window.innerWidth * 0.38, 165); // Dynamic responsive radius
-
-            for (let i = 0; i < totalCards; i++) {
-                const isDrawn = state.drawnCards.includes(i);
-                const assignedTeam = state.assignments[i] || null;
-
-                const angle = (i * (360 / totalCards)) * (Math.PI / 180);
-                const x = radius * Math.sin(angle);
-                const y = -radius * Math.cos(angle);
-
-                const cardEl = document.createElement('button');
-                cardEl.className = `wheel-card absolute w-10 h-10 sm:w-12 sm:h-12 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center cursor-pointer shadow-md ${
-                    isDrawn ? 'gold-card-drawn font-black' : 'gold-card text-gold-300 hover:scale-110 hover:border-gold-300'
-                }`;
-
-                cardEl.style.left = `calc(50% + ${x}px - 1.25rem)`;
-                cardEl.style.top = `calc(50% + ${y}px - 1.25rem)`;
-
-                cardEl.innerHTML = isDrawn ? `<i class="fa-solid fa-check text-darkgreen-950"></i>` : (i + 1);
-
-                if (!isDrawn) {
-                    cardEl.onclick = () => handleCardClick(i);
-                } else {
-                    cardEl.title = `تم سحب: ${assignedTeam}`;
-                }
-
-                container.appendChild(cardEl);
-            }
-        }
-
-        function renderMatches() {
-            const leftContainer = document.getElementById('matchesLeft');
-            const rightContainer = document.getElementById('matchesRight');
-
-            if (!leftContainer || !rightContainer) return;
-
-            leftContainer.innerHTML = '';
-            rightContainer.innerHTML = '';
-
-            state.matches.forEach((match, idx) => {
-                const matchNum = idx + 1;
-                const matchHtml = `
-                    <div class="match-box gold-card rounded-xl p-3 relative overflow-hidden transition-all duration-300 hover:border-gold-400">
-                        <div class="flex justify-between items-center mb-2 border-b border-gold-500/20 pb-1 text-xs text-gold-400">
-                            <span class="font-bold"><i class="fa-solid fa-trophy text-[10px] ml-1"></i> مباراة ${matchNum}</span>
-                            <span class="text-[10px] text-gray-400 font-semibold">دور الـ 16</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-center text-xs sm:text-sm">
-                            <div class="p-2 rounded-lg transition-all ${match.teamA ? 'bg-gold-500/25 text-gold-100 border border-gold-500/50 shadow-sm' : 'bg-darkgreen-950/60 text-gray-500 border border-dashed border-gray-700'} font-bold">
-                                ${match.teamA || 'بانتظار السحب'}
-                            </div>
-                            <div class="p-2 rounded-lg transition-all ${match.teamB ? 'bg-gold-500/25 text-gold-100 border border-gold-500/50 shadow-sm' : 'bg-darkgreen-950/60 text-gray-500 border border-dashed border-gray-700'} font-bold">
-                                ${match.teamB || 'بانتظار السحب'}
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                if (idx < 4) {
-                    leftContainer.innerHTML += matchHtml;
-                } else {
-                    rightContainer.innerHTML += matchHtml;
-                }
-            });
-        }
-
-        function updateStatusText() {
-            const el = document.getElementById('currentDrawStatus');
-            if (!el) return;
-
-            const drawnCount = state.drawnCards.length;
-            if (drawnCount === 0) {
-                el.innerText = "جاهز لبدء السحب (0 من 16 فريقاً)";
-            } else if (drawnCount < 16) {
-                el.innerText = `تم سحب ${drawnCount} من 16 فريقاً - القرعة جارية مباُشرة`;
-            } else {
-                el.innerText = "اكتملت كافة مواجهات دور الـ 16 لبطولة دوري قيد الأرض!";
-            }
-        }
-
-        // ----------------------------------------------------
-        // 3. User Action & Selection Logic
-        // ----------------------------------------------------
-        window.handleCardClick = function(cardIndex) {
-            if (state.drawnCards.includes(cardIndex)) return;
-
-            // Accelerate 3D Ball Spin Effect
-            accelerateBallSpin();
-
-            const usedTeams = Object.values(state.assignments);
-            const availableTeams = TEAMS.filter(t => !usedTeams.includes(t));
-
-            if (availableTeams.length === 0) return;
-
-            // Random selection from remaining teams
-            const randomTeam = availableTeams[Math.floor(Math.random() * availableTeams.length)];
-
-            // Find next open match slot
-            let nextSlot = null;
-            let updatedMatches = [...state.matches];
-
-            for (let i = 0; i < updatedMatches.length; i++) {
-                if (!updatedMatches[i].teamA) {
-                    updatedMatches[i].teamA = randomTeam;
-                    nextSlot = { matchNum: i + 1, slot: 'الأول' };
-                    break;
-                } else if (!updatedMatches[i].teamB) {
-                    updatedMatches[i].teamB = randomTeam;
-                    nextSlot = { matchNum: i + 1, slot: 'الثاني' };
-                    break;
-                }
-            }
-
-            const newState = {
-                ...state,
-                drawnCards: [...state.drawnCards, cardIndex],
-                assignments: { ...state.assignments, [cardIndex]: randomTeam },
-                matches: updatedMatches,
-                lastDrawn: { team: randomTeam, matchNum: nextSlot.matchNum, slot: nextSlot.slot }
-            };
-
-            // Trigger local celebration effects
-            triggerDrawEffects(randomTeam, nextSlot.matchNum, nextSlot.slot);
-
-            // Save globally
-            saveState(newState);
-        };
-
-        function triggerDrawEffects(teamName, matchNum, slot) {
-            // Confetti
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 100,
-                    spread: 80,
-                    origin: { y: 0.6 },
-                    colors: ['#D4AF37', '#FFF1B0', '#0B2B1B', '#ffffff']
-                });
-            }
-
-            // Show Popup Modal
-            showModal(teamName, `تم تسكينه في المباراة رقم (${matchNum}) - الفريق ${slot}`);
-        }
-
-        function showModal(teamName, info) {
-            document.getElementById('modalTeamName').innerText = teamName;
-            document.getElementById('modalMatchInfo').innerText = info;
-            document.getElementById('resultModal').classList.remove('hidden');
-        }
-
-        window.closeModal = function() {
-            document.getElementById('resultModal').classList.add('hidden');
-        };
-
-        window.confirmReset = function() {
-            if (confirm('هل أنت متأكد من إعادت ضبط القرعة بالكامل ومسح جميع المواجهات؟')) {
-                const resetState = {
-                    drawnCards: [],
-                    assignments: {},
-                    matches: Array(8).fill(null).map(() => ({ teamA: null, teamB: null })),
-                    lastDrawn: null
-                };
-                saveState(resetState);
-            }
-        };
-
-        // Set Print Date
-        document.getElementById('printDate').innerText = new Date().toLocaleDateString('ar-OM', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
-
-        // ----------------------------------------------------
-        // 4. Three.js 3D Interactive Football Render
-        // ----------------------------------------------------
-        let ballMesh, scene, camera, renderer;
-        let spinSpeed = 0.01;
-
-        function init3DBall() {
-            const canvas = document.getElementById('ball3dCanvas');
-            const container = document.getElementById('ball3dContainer');
-            if (!canvas || !container) return;
-
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.z = 2.8;
-
-            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            // Create Canvas Texture for Football Pattern
-            const ballCanvas = document.createElement('canvas');
-            ballCanvas.width = 512;
-            ballCanvas.height = 256;
-            const ctx = ballCanvas.getContext('2d');
-
-            // Draw Gold Base with Hexagonal Pattern
-            ctx.fillStyle = '#D4AF37';
-            ctx.fillRect(0, 0, 512, 256);
-
-            ctx.fillStyle = '#051A10';
-            for (let y = 0; y < 256; y += 32) {
-                for (let x = 0; x < 512; x += 32) {
-                    if ((x + y) % 64 === 0) {
-                        ctx.beginPath();
-                        ctx.arc(x + 16, y + 16, 10, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-            }
-
-            const texture = new THREE.CanvasTexture(ballCanvas);
-
-            // Sphere Mesh
-            const geometry = new THREE.SphereGeometry(1, 32, 32);
-            const material = new THREE.MeshStandardMaterial({
-                map: texture,
-                metalness: 0.4,
-                roughness: 0.3
-            });
-
-            ballMesh = new THREE.Mesh(geometry, material);
-            scene.add(ballMesh);
-
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0xfff1b0, 1.2);
-            dirLight.position.set(5, 5, 5);
-            scene.add(dirLight);
-
-            // Animation Loop
-            function animate() {
-                requestAnimationFrame(animate);
-                if (ballMesh) {
-                    ballMesh.rotation.y += spinSpeed;
-                    ballMesh.rotation.x += spinSpeed * 0.5;
-
-                    // Decelerate back to smooth speed
-                    if (spinSpeed > 0.01) {
-                        spinSpeed *= 0.95;
-                    }
-                }
-                renderer.render(scene, camera);
-            }
-
-            animate();
-        }
-
-        function accelerateBallSpin() {
-            spinSpeed = 0.25; // Speed up rotation on draw
-        }
-
-        // Initialize Everything
-        window.onload = function() {
-            initSync();
-            init3DBall();
-        };
-
-        window.onresize = function() {
-            renderWheel();
-        };
-    </script>
-</body>
-</html>
+        .btn-draw {
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+            color: #fff;
+            border: 2px solid #86efac;
+            padding: 8px 22px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 3
