@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>دوري قيد الأرض 2026-2027 - مدرسة الإمام سيف بن سلطان</title>
     <!-- خط تجوال العربي -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
@@ -54,16 +54,18 @@
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 1350px;
-            padding: 10px 15px;
+            max-width: 1400px;
+            padding: clamp(8px, 2vw, 15px);
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 92vh;
+            justify-content: space-between;
         }
 
         header {
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: clamp(5px, 1.5vw, 12px);
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -72,16 +74,17 @@
         }
 
         .header-titles h1 {
-            font-size: 22px;
+            font-size: clamp(16px, 2.2vw, 26px);
             font-weight: 900;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            line-height: 1.3;
         }
 
         .header-titles h2 {
-            font-size: 15px;
+            font-size: clamp(12px, 1.4vw, 17px);
             color: #e2e8f0;
             font-weight: 700;
         }
@@ -89,15 +92,16 @@
         .top-actions {
             display: flex;
             gap: 10px;
+            margin-top: 4px;
         }
 
         .btn-action {
             background: rgba(212, 175, 55, 0.15);
             border: 1px solid var(--border-gold);
             color: var(--gold-primary);
-            padding: 5px 14px;
+            padding: clamp(4px, 1vw, 7px) clamp(10px, 2vw, 18px);
             border-radius: 20px;
-            font-size: 12px;
+            font-size: clamp(11px, 1.1vw, 13px);
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -109,17 +113,17 @@
             box-shadow: var(--gold-glow);
         }
 
-        /* تنسيق مسرح القرعة والمباريات الجانبية */
+        /* مسرح القرعة التكيفي لكافة الأجهزة */
         .draw-stage {
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            gap: 15px;
+            grid-template-columns: minmax(240px, 300px) 1fr minmax(240px, 300px);
+            gap: clamp(8px, 1.5vw, 15px);
             width: 100%;
             align-items: center;
-            margin-top: 5px;
+            margin: 5px 0;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 900px) {
             .draw-stage {
                 grid-template-columns: 1fr;
             }
@@ -128,24 +132,24 @@
         .matches-column {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: clamp(6px, 1vw, 10px);
         }
 
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--border-gold);
             border-radius: 8px;
-            padding: 6px 10px;
+            padding: clamp(5px, 1vw, 8px) clamp(8px, 1.2vw, 12px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             text-align: center;
             backdrop-filter: blur(8px);
         }
 
         .match-title {
-            font-size: 12px;
+            font-size: clamp(11px, 1.1vw, 13px);
             font-weight: 800;
             color: var(--gold-primary);
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .match-teams {
@@ -159,13 +163,13 @@
             flex: 1;
             background: linear-gradient(180deg, #ffe89a 0%, #d4af37 50%, #8a6d1c 100%);
             border-radius: 5px;
-            padding: 5px 2px;
-            min-height: 36px;
+            padding: clamp(4px, 0.8vw, 6px) 2px;
+            min-height: clamp(32px, 3.5vw, 40px);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 12px;
+            font-size: clamp(11px, 1.1vw, 13px);
             color: #000;
             box-shadow: inset 0 0 5px rgba(255,255,255,0.4);
         }
@@ -174,11 +178,11 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1px dashed var(--border-gold);
             color: var(--gold-primary);
-            font-size: 13px;
+            font-size: clamp(12px, 1.2vw, 14px);
         }
 
         .vs-badge {
-            font-size: 10px;
+            font-size: clamp(9px, 0.9vw, 11px);
             font-weight: 900;
             color: #fff;
             background: rgba(212, 175, 55, 0.3);
@@ -188,17 +192,16 @@
         }
 
         .match-status {
-            font-size: 10px;
+            font-size: clamp(9px, 0.8vw, 10px);
             color: #cbd5e1;
             margin-top: 2px;
         }
 
-        /* العجلة الدائرية والكرة 3D والبطاقات الـ 16 */
+        /* العجلة الدائرية التفاعلية المرنة */
         .wheel-center-container {
             position: relative;
-            width: 100%;
-            max-width: 420px;
-            height: 420px;
+            width: clamp(280px, 35vw, 420px);
+            height: clamp(280px, 35vw, 420px);
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -221,8 +224,8 @@
 
         #ball-3d-container {
             position: absolute;
-            width: 125px;
-            height: 125px;
+            width: clamp(90px, 11vw, 135px);
+            height: clamp(90px, 11vw, 135px);
             border-radius: 50%;
             z-index: 2;
             cursor: pointer;
@@ -240,10 +243,10 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 44px;
-            height: 58px;
-            margin-top: -29px;
-            margin-left: -22px;
+            width: clamp(34px, 4vw, 46px);
+            height: clamp(44px, 5.2vw, 60px);
+            margin-top: calc(-1 * clamp(22px, 2.6vw, 30px));
+            margin-left: calc(-1 * clamp(17px, 2vw, 23px));
             cursor: pointer;
             transition: transform 0.3s ease;
         }
@@ -263,7 +266,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: clamp(13px, 1.5vw, 18px);
             font-weight: 900;
             color: #000;
         }
@@ -283,8 +286,8 @@
             background: #22c55e;
             color: #fff;
             font-size: 9px;
-            width: 15px;
-            height: 15px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -293,7 +296,7 @@
         }
 
         .controls-bar {
-            margin-top: 10px;
+            margin-top: clamp(8px, 1.5vw, 15px);
             display: flex;
             gap: 10px;
             align-items: center;
@@ -305,8 +308,8 @@
             background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
             color: #fff;
             border: 2px solid #86efac;
-            padding: 8px 22px;
-            font-size: 15px;
+            padding: clamp(6px, 1vw, 10px) clamp(16px, 2vw, 26px);
+            font-size: clamp(13px, 1.2vw, 16px);
             font-weight: 800;
             border-radius: 30px;
             cursor: pointer;
@@ -323,8 +326,8 @@
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
             border: 1px solid #ef4444;
-            padding: 6px 15px;
-            font-size: 12px;
+            padding: clamp(5px, 0.8vw, 8px) clamp(12px, 1.5vw, 18px);
+            font-size: clamp(11px, 1vw, 13px);
             font-weight: 700;
             border-radius: 20px;
             cursor: pointer;
@@ -335,6 +338,7 @@
             color: #fff;
         }
 
+        /* نافذة الكشف منبثقة */
         .reveal-modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -356,7 +360,7 @@
 
         .reveal-card {
             background: var(--gold-gradient);
-            padding: 25px 40px;
+            padding: clamp(20px, 3vw, 30px) clamp(25px, 4vw, 50px);
             border-radius: 16px;
             text-align: center;
             box-shadow: 0 0 40px rgba(245, 208, 97, 0.8);
@@ -371,22 +375,55 @@
         }
 
         .reveal-card .team-name {
-            font-size: 32px;
+            font-size: clamp(24px, 3.5vw, 36px);
             font-weight: 900;
             margin: 8px 0;
         }
 
         .reveal-card .dest-text {
-            font-size: 14px;
+            font-size: clamp(12px, 1.3vw, 16px);
             font-weight: 800;
             background: rgba(0,0,0,0.15);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 10px;
+        }
+
+        /* التوقيع وشعار الشركة المطورة AITECHOM */
+        footer.developer-footer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            margin-top: 10px;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: clamp(11px, 1.1vw, 13px);
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        .brand-logo-text {
+            background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #f5d061 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: clamp(13px, 1.3vw, 16px);
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
         }
 
         @media print {
             body { background: #fff !important; color: #000 !important; }
-            body::before, .wheel-center-container, .controls-bar, .top-actions { display: none !important; }
+            body::before, .wheel-center-container, .controls-bar, .top-actions, footer.developer-footer { display: none !important; }
             .match-card { background: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; color: #000 !important; }
             .match-title, .match-status { color: #000 !important; }
             .team-box { background: #eee !important; color: #000 !important; border: 1px solid #000 !important; }
@@ -413,7 +450,7 @@
             <div class="wheel-center-container">
                 <div class="wheel-ring"></div>
                 
-                <!-- حاوية كرة القدم ثلاثية الأبعاد 3D -->
+                <!-- حاوية كرة القدم ثلاثية الأبعاد 3D (مونديال قطر 2022) -->
                 <div id="ball-3d-container"></div>
 
                 <div class="wheel-cards" id="wheel-cards-container"></div>
@@ -429,6 +466,14 @@
             <button class="btn-reset" onclick="resetDraw()">إعادة القرعة 🔄</button>
         </div>
     </div>
+
+    <!-- توقيع الشركة المصممة AITECHOM -->
+    <footer class="developer-footer">
+        <div class="footer-content">
+            <span>تم التصميم والتطوير بواسطة</span>
+            <span class="brand-logo-text">AITECHOM</span>
+        </div>
+    </footer>
 
     <div class="reveal-modal" id="reveal-modal">
         <div class="reveal-card">
@@ -488,7 +533,7 @@
             } catch (e) {}
         }
 
-        // --- بناء الكرة ثلاثية الأبعاد 3D (مونديال قطر 2022) ---
+        // --- كرة القدم ثلاثية الأبعاد 3D (تصميم الرحلة - قطر 2022) ---
         let scene, camera, renderer, ballMesh;
 
         function init3DBall() {
@@ -500,53 +545,67 @@
             camera.position.z = 2.8;
 
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(125, 125);
+            
+            function updateBallSize() {
+                const width = container.clientWidth || 120;
+                renderer.setSize(width, width);
+            }
+            updateBallSize();
             container.appendChild(renderer.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
+            window.addEventListener('resize', updateBallSize);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
             scene.add(ambientLight);
 
-            const dirLight = new THREE.DirectionalLight(0xffe89a, 1.2);
-            dirLight.position.set(2, 2, 2);
+            const dirLight = new THREE.DirectionalLight(0xfffaed, 1.4);
+            dirLight.position.set(3, 3, 3);
             scene.add(dirLight);
 
             const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
+            canvas.width = 1024;
+            canvas.height = 1024;
             const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 512, 512);
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, 1024, 1024);
 
-            ctx.fillStyle = '#1e293b';
-            for(let i=0; i<8; i++) {
-                let x = Math.random()*512;
-                let y = Math.random()*512;
+            ctx.fillStyle = '#0f172a';
+            for (let i = 0; i < 12; i++) {
+                let x = Math.random() * 1024;
+                let y = Math.random() * 1024;
                 ctx.beginPath();
-                ctx.arc(x, y, 28, 0, Math.PI*2);
+                ctx.arc(x, y, 45, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            function drawRibbon(color, width, path) {
+            function drawVibrantRibbon(color, width, x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2) {
                 ctx.strokeStyle = color;
                 ctx.lineWidth = width;
+                ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(path[0][0], path[0][1]);
-                ctx.bezierCurveTo(path[1][0], path[1][1], path[2][0], path[2][1], path[3][0], path[3][1]);
+                ctx.moveTo(x1, y1);
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
                 ctx.stroke();
             }
 
-            drawRibbon('#ef4444', 16, [[50,100], [200,50], [300,400], [450,200]]);
-            drawRibbon('#3b82f6', 12, [[30,200], [150,300], [350,100], [480,350]]);
-            drawRibbon('#eab308', 10, [[100,400], [250,200], [400,300], [500,100]]);
-            drawRibbon('#8b5cf6', 8, [[80,50], [180,350], [320,150], [420,450]]);
+            drawVibrantRibbon('#e11d48', 28, 100, 200, 400, 100, 600, 800, 900, 400);
+            drawVibrantRibbon('#2563eb', 24, 50, 600, 300, 900, 700, 200, 950, 700);
+            drawVibrantRibbon('#f59e0b', 22, 200, 50, 500, 500, 500, 500, 800, 950);
+            drawVibrantRibbon('#7c3aed', 20, 300, 900, 600, 400, 400, 600, 700, 100);
+            drawVibrantRibbon('#d4af37', 18, 50, 400, 500, 100, 500, 900, 900, 600);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.moveTo(512, 200); ctx.lineTo(560, 300); ctx.lineTo(464, 300);
+            ctx.fill();
 
             const texture = new THREE.CanvasTexture(canvas);
             const geometry = new THREE.IcosahedronGeometry(1, 3);
             const material = new THREE.MeshStandardMaterial({
                 map: texture,
-                roughness: 0.3,
-                metalness: 0.1
+                roughness: 0.25,
+                metalness: 0.15
             });
 
             ballMesh = new THREE.Mesh(geometry, material);
@@ -555,7 +614,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 if (ballMesh) {
-                    ballMesh.rotation.y += 0.008;
+                    ballMesh.rotation.y += 0.009;
                     ballMesh.rotation.x += 0.004;
                 }
                 renderer.render(scene, camera);
@@ -600,10 +659,14 @@
 
         function renderWheel() {
             const container = document.getElementById('wheel-cards-container');
-            if(!container) return;
+            const wheelBox = document.querySelector('.wheel-center-container');
+            if(!container || !wheelBox) return;
 
             container.innerHTML = '';
-            const radius = 150;
+            
+            // احتساب قطر العجلة متجاوباً مع حجم الشاشة
+            const containerWidth = wheelBox.clientWidth || 350;
+            const radius = containerWidth * 0.36;
             const total = 16;
 
             for (let i = 0; i < total; i++) {
@@ -625,8 +688,8 @@
             if (state.drawnSlots[slotIndex] || state.availableTeams.length === 0) return;
 
             if (ballMesh) {
-                ballMesh.rotation.y += 3.0;
-                ballMesh.rotation.x += 1.5;
+                ballMesh.rotation.y += 3.5;
+                ballMesh.rotation.x += 1.8;
             }
 
             const randomTeamIndex = Math.floor(Math.random() * state.availableTeams.length);
@@ -680,7 +743,8 @@
             saveState(newState);
         }
 
-        // تشغيل فوري للواجهة مع المزامنة التلقائية
+        window.addEventListener('resize', renderWheel);
+
         window.onload = () => {
             renderApp();
             init3DBall();
