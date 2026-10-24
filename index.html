@@ -197,7 +197,6 @@
             font-weight: 700;
         }
 
-        /* --- تحسين وتكبير منطقة السحب المركزية للشاشات الكبيرة --- */
         .wheel-center-container {
             position: relative;
             width: clamp(340px, 45vw, 540px);
@@ -217,7 +216,6 @@
             box-shadow: inset 0 0 30px rgba(245, 208, 97, 0.4), 0 0 30px rgba(245, 208, 97, 0.4);
         }
 
-        /* تكبير الكرة الذهبية في المنتصف */
         #ball-3d-container {
             position: absolute;
             width: clamp(150px, 20vw, 240px);
@@ -334,18 +332,19 @@
             color: #fff;
         }
 
+        /* نافذة العرض والتفاعل للكل */
         .reveal-modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.88);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(10px);
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(12px);
         }
 
         .reveal-modal.active {
@@ -355,13 +354,13 @@
 
         .reveal-card {
             background: var(--gold-gradient);
-            padding: clamp(25px, 4vw, 40px) clamp(35px, 5vw, 60px);
-            border-radius: 20px;
+            padding: clamp(30px, 5vw, 50px) clamp(40px, 6vw, 70px);
+            border-radius: 24px;
             text-align: center;
-            box-shadow: 0 0 50px rgba(245, 208, 97, 0.9);
-            border: 3px solid #fff;
-            transform: scale(0.6);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 60px rgba(245, 208, 97, 0.95);
+            border: 4px solid #fff;
+            transform: scale(0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: #000;
         }
 
@@ -370,21 +369,23 @@
         }
 
         .reveal-card h3 {
-            font-size: clamp(18px, 2vw, 24px);
+            font-size: clamp(20px, 2.5vw, 28px);
+            font-weight: 800;
         }
 
         .reveal-card .team-name {
-            font-size: clamp(30px, 4.5vw, 46px);
+            font-size: clamp(34px, 5vw, 52px);
             font-weight: 900;
-            margin: 10px 0;
+            margin: 15px 0;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.5);
         }
 
         .reveal-card .dest-text {
-            font-size: clamp(14px, 1.5vw, 20px);
+            font-size: clamp(16px, 2vw, 24px);
             font-weight: 800;
             background: rgba(0,0,0,0.15);
-            padding: 6px 16px;
-            border-radius: 12px;
+            padding: 8px 20px;
+            border-radius: 15px;
         }
 
         footer.developer-footer {
@@ -459,10 +460,7 @@
 
             <div class="wheel-center-container">
                 <div class="wheel-ring"></div>
-                
-                <!-- حاوية الكرة الذهبية ثلاثية الأبعاد المكبرة -->
                 <div id="ball-3d-container"></div>
-
                 <div class="wheel-cards" id="wheel-cards-container"></div>
             </div>
 
@@ -488,11 +486,12 @@
         </div>
     </footer>
 
+    <!-- نافذة العرض المتزامنة لجميع الأجهزة -->
     <div class="reveal-modal" id="reveal-modal">
         <div class="reveal-card">
             <h3>تم سحب الفريق</h3>
-            <div class="team-name" id="modal-team-name">فريق 11/1</div>
-            <div class="dest-text" id="modal-dest-text">يتجه إلى مباراة 1</div>
+            <div class="team-name" id="modal-team-name">فريق --</div>
+            <div class="dest-text" id="modal-dest-text">يتجه إلى مباراة --</div>
         </div>
     </div>
 
@@ -507,6 +506,7 @@
         ];
 
         let state = loadState();
+        let lastModalTimestamp = 0;
 
         function loadState() {
             const saved = localStorage.getItem('qayd_draw_state_2026');
@@ -516,7 +516,8 @@
             return {
                 matches: Array.from({ length: 8 }, (_, i) => ({ id: i + 1, team1: null, team2: null })),
                 drawnSlots: new Array(16).fill(false),
-                availableTeams: [...INITIAL_TEAMS]
+                availableTeams: [...INITIAL_TEAMS],
+                activeModal: null
             };
         }
 
@@ -542,8 +543,30 @@
                     state = data;
                     localStorage.setItem('qayd_draw_state_2026', JSON.stringify(state));
                     renderApp();
+                    checkModalState();
                 }
             } catch (e) {}
+        }
+
+        // --- مزامنة التفاعل والظهور الفوري لمدة 3 ثوانٍ لكافة الأجهزة ---
+        function checkModalState() {
+            const modal = document.getElementById('reveal-modal');
+            if (state.activeModal && state.activeModal.timestamp > lastModalTimestamp) {
+                lastModalTimestamp = state.activeModal.timestamp;
+                
+                document.getElementById('modal-team-name').innerText = state.activeModal.teamName;
+                document.getElementById('modal-dest-text').innerText = `يتجه إلى ${state.activeModal.destText}`;
+                
+                modal.classList.add('active');
+
+                // إطلاق الألعاب النارية لجميع الشاشات في نفس الوقت
+                confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+
+                // تثبيت النافذة لمدة 3 ثوانٍ قبل الاختفاء (3000 ملي ثانية)
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                }, 3000);
+            }
         }
 
         // --- بناء الكرة الذهبية الفاخرة ثلاثية الأبعاد (3D Gold Football) ---
@@ -730,14 +753,14 @@
                 }
             }
 
-            showRevealModal(selectedTeam, `مباراة ${targetMatch.id} (${slotPosition})`);
-            saveState(state);
+            // إرسال كائن التفاعل بالساعة اللحظية ليظهر لدى الجميع بنفس الوقت
+            state.activeModal = {
+                teamName: selectedTeam,
+                destText: `مباراة ${targetMatch.id} (${slotPosition})`,
+                timestamp: Date.now()
+            };
 
-            if (targetMatch.team1 && targetMatch.team2) {
-                setTimeout(() => {
-                    confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
-                }, 400);
-            }
+            saveState(state);
         }
 
         function drawRandomCard() {
@@ -747,20 +770,13 @@
             handleCardClick(randomIdx);
         }
 
-        function showRevealModal(teamName, destText) {
-            const modal = document.getElementById('reveal-modal');
-            document.getElementById('modal-team-name').innerText = teamName;
-            document.getElementById('modal-dest-text').innerText = `يتجه إلى ${destText}`;
-            modal.classList.add('active');
-            setTimeout(() => modal.classList.remove('active'), 1500);
-        }
-
         function resetDraw() {
             if (!confirm("هل أنت متأكد من إعادة إجراء القرعة بالكامل؟")) return;
             const newState = {
                 matches: Array.from({ length: 8 }, (_, i) => ({ id: i + 1, team1: null, team2: null })),
                 drawnSlots: new Array(16).fill(false),
-                availableTeams: [...INITIAL_TEAMS]
+                availableTeams: [...INITIAL_TEAMS],
+                activeModal: null
             };
             saveState(newState);
         }
@@ -771,7 +787,7 @@
             renderApp();
             init3DBall();
             fetchCloudState();
-            setInterval(fetchCloudState, 2000); // تحديث فوري بين جميع أجهزة العرض
+            setInterval(fetchCloudState, 1000); // زمن استعلام 1 ثانية لمزامنة سريعة وتفاعلية
         };
     </script>
 </body>
