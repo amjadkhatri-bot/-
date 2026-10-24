@@ -332,7 +332,6 @@
             color: #fff;
         }
 
-        /* نافذة العرض والتفاعل للكل */
         .reveal-modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -496,7 +495,8 @@
     </div>
 
     <script>
-        const DB_URL = "https://qayd-draw-default-rtdb.firebaseio.com/qayd_draw_2026.json";
+        // رابط قاعدة البيانات الخاص بك على Firebase
+        const DB_URL = "https://qayd-draw-2026-default-rtdb.firebaseio.com/qayd_draw_2026.json";
 
         const INITIAL_TEAMS = [
             "فريق 11/1", "فريق 11/2", "فريق 11/3", "فريق 11/4",
@@ -753,7 +753,6 @@
                 }
             }
 
-            // إرسال كائن التفاعل بالساعة اللحظية ليظهر لدى الجميع بنفس الوقت
             state.activeModal = {
                 teamName: selectedTeam,
                 destText: `مباراة ${targetMatch.id} (${slotPosition})`,
@@ -787,7 +786,7 @@
             renderApp();
             init3DBall();
             fetchCloudState();
-            setInterval(fetchCloudState, 1000); // زمن استعلام 1 ثانية لمزامنة سريعة وتفاعلية
+            setInterval(fetchCloudState, 1000); // تحديث كل ثانية للمزامنة الفورية بين جميع الأجهزة
         };
     </script>
 </body>
