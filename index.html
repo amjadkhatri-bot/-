@@ -507,6 +507,7 @@
 
         let state = loadState();
         let lastModalTimestamp = 0;
+        let modalTimeoutId = null;
 
         function loadState() {
             const saved = localStorage.getItem('qayd_draw_state_2026');
@@ -548,7 +549,7 @@
             } catch (e) {}
         }
 
-        // --- مزامنة التفاعل والظهور الفوري لمدة 3 ثوانٍ لكافة الأجهزة ---
+        // --- مزامنة التفاعل والظهور الفوري لكافة الأجهزة ---
         function checkModalState() {
             const modal = document.getElementById('reveal-modal');
             if (state.activeModal && state.activeModal.timestamp > lastModalTimestamp) {
@@ -560,12 +561,14 @@
                 modal.classList.add('active');
 
                 // إطلاق الألعاب النارية لجميع الشاشات في نفس الوقت
-                confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+                confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
 
-                // تثبيت النافذة لمدة 3 ثوانٍ قبل الاختفاء (3000 ملي ثانية)
-                setTimeout(() => {
+                // إلغاء المؤقت القديم إن وجد وتعيين مدة العرض (هنا تم تحديدها بـ 6000 ملي ثانية = 6 ثوانٍ)
+                if (modalTimeoutId) clearTimeout(modalTimeoutId);
+                
+                modalTimeoutId = setTimeout(() => {
                     modal.classList.remove('active');
-                }, 3000);
+                }, 6000); // 👈 يمكنك تغيير الرقم 6000 إلى أية مدة ترغب بها (مثلاً 5000 لـ 5 ثوانٍ أو 8000 لـ 8 ثوانٍ)
             }
         }
 
@@ -786,7 +789,7 @@
             renderApp();
             init3DBall();
             fetchCloudState();
-            setInterval(fetchCloudState, 1000); // تحديث كل ثانية للمزامنة الفورية بين جميع الأجهزة
+            setInterval(fetchCloudState, 1000); // تحديث كل ثانية للمزامنة اللحظية
         };
     </script>
 </body>
